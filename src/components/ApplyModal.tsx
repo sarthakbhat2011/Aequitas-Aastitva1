@@ -27,7 +27,8 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({
     experienceLevel: 'Intermediate',
     primaryCommittee: preselectedCommitteeId || 'ccc',
     secondaryCommittee: 'lok-sabha',
-    preferredCountry: '',
+    primaryPreferredCountry: '',
+    secondaryPreferredCountry: '',
     statementOfPurpose: '',
   });
 
@@ -234,64 +235,91 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({
                 </div>
               )}
 
-              {/* STEP 3: Committee Preference */}
+              {/* STEP 3: Committee & Portfolio Preferences */}
               {step === 3 && (
-                <div className="space-y-4">
+                <div className="space-y-5">
                   <h3 className="font-label-caps text-xs text-[#C9A34E] tracking-widest uppercase font-bold">
                     Step 3: Committee & Portfolio Preferences
                   </h3>
 
-                  <div>
-                    <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
-                      Primary Committee Preference *
-                    </label>
-                    <select
-                      value={formData.primaryCommittee}
-                      onChange={(e) =>
-                        setFormData({ ...formData, primaryCommittee: e.target.value })
-                      }
-                      className="w-full px-4 py-3 bg-[#141414] border border-white/10 text-sm text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
-                    >
-                      {COMMITTEES.map((c) => (
-                        <option key={c.id} value={c.id}>
-                          {c.title} ({c.abbreviation})
-                        </option>
-                      ))}
-                    </select>
+                  {/* Primary Preference Block */}
+                  <div className="p-4 bg-[#141414]/80 border border-[#C9A34E]/30 space-y-3">
+                    <span className="font-label-caps text-[10px] text-[#C9A34E] uppercase font-bold tracking-wider block">
+                      1st Preference (Primary)
+                    </span>
+                    <div>
+                      <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
+                        Primary Committee Preference *
+                      </label>
+                      <select
+                        value={formData.primaryCommittee}
+                        onChange={(e) =>
+                          setFormData({ ...formData, primaryCommittee: e.target.value })
+                        }
+                        className="w-full px-4 py-2.5 bg-[#0E0E0E] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
+                      >
+                        {COMMITTEES.map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {c.title} ({c.abbreviation})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
+                        Primary Preferred Country / Portfolio / MP Stance
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.primaryPreferredCountry}
+                        onChange={(e) =>
+                          setFormData({ ...formData, primaryPreferredCountry: e.target.value })
+                        }
+                        placeholder="e.g. Delegate of India / MP for New Delhi / Mumbai Indians Franchise"
+                        className="w-full px-4 py-2.5 bg-[#0E0E0E] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none placeholder:text-[#75735B]"
+                      />
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
-                      Secondary Committee Preference *
-                    </label>
-                    <select
-                      value={formData.secondaryCommittee}
-                      onChange={(e) =>
-                        setFormData({ ...formData, secondaryCommittee: e.target.value })
-                      }
-                      className="w-full px-4 py-3 bg-[#141414] border border-white/10 text-sm text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
-                    >
-                      {COMMITTEES.map((c) => (
-                        <option key={c.id} value={c.id}>
-                          {c.title} ({c.abbreviation})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  {/* Secondary Preference Block */}
+                  <div className="p-4 bg-[#141414]/80 border border-white/10 space-y-3">
+                    <span className="font-label-caps text-[10px] text-[#D9D7D2]/80 uppercase font-bold tracking-wider block">
+                      2nd Preference (Secondary)
+                    </span>
+                    <div>
+                      <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
+                        Secondary Committee Preference *
+                      </label>
+                      <select
+                        value={formData.secondaryCommittee}
+                        onChange={(e) =>
+                          setFormData({ ...formData, secondaryCommittee: e.target.value })
+                        }
+                        className="w-full px-4 py-2.5 bg-[#0E0E0E] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
+                      >
+                        {COMMITTEES.map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {c.title} ({c.abbreviation})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-                  <div>
-                    <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
-                      Preferred Country / Portfolio / MP Stance
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.preferredCountry}
-                      onChange={(e) =>
-                        setFormData({ ...formData, preferredCountry: e.target.value })
-                      }
-                      placeholder="e.g. Delegate of India / MP for New Delhi / Franchise Representative"
-                      className="w-full px-4 py-3 bg-[#141414] border border-white/10 text-sm text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
-                    />
+                    <div>
+                      <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
+                        Secondary Preferred Country / Portfolio / MP Stance
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.secondaryPreferredCountry}
+                        onChange={(e) =>
+                          setFormData({ ...formData, secondaryPreferredCountry: e.target.value })
+                        }
+                        placeholder="e.g. Delegate of USA / MP for Varanasi / Chennai Super Kings"
+                        className="w-full px-4 py-2.5 bg-[#0E0E0E] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none placeholder:text-[#75735B]"
+                      />
+                    </div>
                   </div>
                 </div>
               )}

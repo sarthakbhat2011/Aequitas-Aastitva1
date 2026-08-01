@@ -49,6 +49,8 @@ export interface ApplicationFormData {
   experienceLevel: 'First-time Delegate' | 'Intermediate' | 'Veteran Delegate' | 'Executive Board';
   primaryCommittee: string;
   secondaryCommittee: string;
-  preferredCountry: string;
+  primaryPreferredCountry: string;
+  secondaryPreferredCountry: string;
+  preferredCountry?: string;
   statementOfPurpose: string;
 }

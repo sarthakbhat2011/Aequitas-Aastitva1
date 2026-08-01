@@ -31,7 +31,9 @@ interface ApplicationRecord {
   experienceLevel: string;
   primaryCommittee: string;
   secondaryCommittee: string;
-  preferredCountry: string;
+  primaryPreferredCountry?: string;
+  secondaryPreferredCountry?: string;
+  preferredCountry?: string;
   statementOfPurpose: string;
   submittedAt: string;
   passId: string;
@@ -117,8 +119,9 @@ export const AdminSecretariatModal: React.FC<AdminSecretariatModalProps> = ({ is
       'Institution',
       'Experience Level',
       'Primary Committee',
+      'Primary Portfolio Preference',
       'Secondary Committee',
-      'Preferred Country',
+      'Secondary Portfolio Preference',
       'Statement of Purpose',
       'Submitted At'
     ];
@@ -131,8 +134,9 @@ export const AdminSecretariatModal: React.FC<AdminSecretariatModalProps> = ({ is
       `"${app.institution || ''}"`,
       `"${app.experienceLevel || ''}"`,
       `"${COMMITTEES.find((c) => c.id === app.primaryCommittee)?.title || app.primaryCommittee || ''}"`,
+      `"${app.primaryPreferredCountry || app.preferredCountry || ''}"`,
       `"${COMMITTEES.find((c) => c.id === app.secondaryCommittee)?.title || app.secondaryCommittee || ''}"`,
-      `"${app.preferredCountry || ''}"`,
+      `"${app.secondaryPreferredCountry || ''}"`,
       `"${(app.statementOfPurpose || '').replace(/"/g, '""')}"`,
       `"${app.submittedAt || ''}"`
     ]);
@@ -380,12 +384,12 @@ export const AdminSecretariatModal: React.FC<AdminSecretariatModalProps> = ({ is
 
                           <div className="space-y-2 bg-[#0E0E0E] p-4 border border-white/5">
                             <div>
-                              <span className="font-label-caps text-[9px] text-[#75735B] uppercase block">Secondary Preference</span>
-                              <span className="text-[#F5F3ED]">{getCommitteeTitle(app.secondaryCommittee)}</span>
+                              <span className="font-label-caps text-[9px] text-[#75735B] uppercase block">1st Portfolio Stance</span>
+                              <span className="text-[#C9A34E] font-medium">{app.primaryPreferredCountry || app.preferredCountry || 'Not Specified'}</span>
                             </div>
                             <div>
-                              <span className="font-label-caps text-[9px] text-[#75735B] uppercase block">Preferred Country / Matrix</span>
-                              <span className="text-[#F5F3ED]">{app.preferredCountry || 'Not Specified'}</span>
+                              <span className="font-label-caps text-[9px] text-[#75735B] uppercase block">2nd Preference & Stance</span>
+                              <span className="text-[#F5F3ED]">{getCommitteeTitle(app.secondaryCommittee)} {app.secondaryPreferredCountry ? `(${app.secondaryPreferredCountry})` : ''}</span>
                             </div>
                             <div>
                               <span className="font-label-caps text-[9px] text-[#75735B] uppercase block">Submission Timestamp</span>
