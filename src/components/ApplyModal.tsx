@@ -4,6 +4,8 @@ import { COMMITTEES, BRAND_LOGOS } from '../data/content';
 import { ApplicationFormData } from '../types';
 import { X, Check, Sparkles, Award, Shield, FileText, ChevronRight, Printer, Loader2 } from 'lucide-react';
 
+import { GOOGLE_FORM_CONFIG } from '../config/googleForm';
+
 interface ApplyModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -61,6 +63,36 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({
           localStorage.setItem('aequitas_applications', JSON.stringify(existing));
         } catch (err) {
           console.error('Failed to save application locally', err);
+        }
+
+        // Silent Background Google Form Sync
+        if (GOOGLE_FORM_CONFIG.enabled && GOOGLE_FORM_CONFIG.formActionUrl) {
+          try {
+            const googleFormData = new FormData();
+            const entries = GOOGLE_FORM_CONFIG.entries;
+
+            if (entries.fullName) googleFormData.append(entries.fullName, formData.fullName);
+            if (entries.email) googleFormData.append(entries.email, formData.email);
+            if (entries.phone) googleFormData.append(entries.phone, formData.phone);
+            if (entries.institution) googleFormData.append(entries.institution, formData.institution);
+            if (entries.experienceLevel) googleFormData.append(entries.experienceLevel, formData.experienceLevel);
+            if (entries.primaryCommittee) googleFormData.append(entries.primaryCommittee, getCommitteeTitle(formData.primaryCommittee));
+            if (entries.primaryPreferredCountry) googleFormData.append(entries.primaryPreferredCountry, formData.primaryPreferredCountry || '');
+            if (entries.secondaryCommittee) googleFormData.append(entries.secondaryCommittee, getCommitteeTitle(formData.secondaryCommittee));
+            if (entries.secondaryPreferredCountry) googleFormData.append(entries.secondaryPreferredCountry, formData.secondaryPreferredCountry || '');
+            if (entries.targetEbRole) googleFormData.append(entries.targetEbRole, formData.targetEbRole || '');
+            if (entries.pastEbExperience) googleFormData.append(entries.pastEbExperience, formData.pastEbExperience || '');
+            if (entries.whyJoinAequitas) googleFormData.append(entries.whyJoinAequitas, formData.whyJoinAequitas || '');
+            if (entries.statementOfPurpose) googleFormData.append(entries.statementOfPurpose, formData.statementOfPurpose || '');
+
+            fetch(GOOGLE_FORM_CONFIG.formActionUrl, {
+              method: 'POST',
+              mode: 'no-cors',
+              body: googleFormData,
+            }).catch((err) => console.error('Silent Google Form sync error:', err));
+          } catch (err) {
+            console.error('Failed to construct Google Form payload:', err);
+          }
         }
 
         const commTitle = COMMITTEES.find((c) => c.id === formData.primaryCommittee)?.title || formData.primaryCommittee;
