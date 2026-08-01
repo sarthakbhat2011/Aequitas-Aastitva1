@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { motion } from 'motion/react';
 import { ChevronDown, Shield, Sparkles, Compass } from 'lucide-react';
 import { BRAND_LOGOS } from '../data/content';
-import { CountdownTimer } from './CountdownTimer';
 import { soundEngine } from '../utils/audio';
 
 interface Hero3DProps {
@@ -559,21 +558,17 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenApply }) => {
             </div>
           </motion.div>
 
-          {/* Institutional Badge Line & Countdown Timer */}
+          {/* Institutional Badge Line */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#141414]/80 border border-[#C9A34E]/30 mb-8 backdrop-blur-md"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#141414]/80 border border-[#C9A34E]/30 backdrop-blur-md">
-              <Compass className="w-3.5 h-3.5 text-[#C9A34E]" />
-              <span className="font-label-caps text-[11px] text-[#D9D7D2] tracking-widest uppercase">
-                The Flagship Indian Youth Diplomatic Assembly
-              </span>
-            </div>
-
-            <CountdownTimer targetDate="2026-11-14T09:00:00+05:30" />
+            <Compass className="w-3.5 h-3.5 text-[#C9A34E]" />
+            <span className="font-label-caps text-[11px] text-[#D9D7D2] tracking-widest uppercase">
+              The Flagship Indian Youth Diplomatic Assembly
+            </span>
           </motion.div>
 
           {/* Dynamic Assembling Serif Headline */}
