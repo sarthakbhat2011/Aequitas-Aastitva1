@@ -53,4 +53,9 @@ export interface ApplicationFormData {
   secondaryPreferredCountry: string;
   preferredCountry?: string;
   statementOfPurpose: string;
+  // Executive Board specific fields
+  targetEbRole?: string;
+  ebCommitteePreferences?: string[];
+  pastEbExperience?: string;
+  whyJoinAequitas?: string;
 }

@@ -37,6 +37,9 @@ interface ApplicationRecord {
   statementOfPurpose: string;
   submittedAt: string;
   passId: string;
+  targetEbRole?: string;
+  pastEbExperience?: string;
+  whyJoinAequitas?: string;
 }
 
 interface AdminSecretariatModalProps {
@@ -118,10 +121,13 @@ export const AdminSecretariatModal: React.FC<AdminSecretariatModalProps> = ({ is
       'Phone',
       'Institution',
       'Experience Level',
+      'Target EB Role',
       'Primary Committee',
       'Primary Portfolio Preference',
       'Secondary Committee',
       'Secondary Portfolio Preference',
+      'Past EB Experience',
+      'Why Join Aequitas EB',
       'Statement of Purpose',
       'Submitted At'
     ];
@@ -133,10 +139,13 @@ export const AdminSecretariatModal: React.FC<AdminSecretariatModalProps> = ({ is
       `"${app.phone || ''}"`,
       `"${app.institution || ''}"`,
       `"${app.experienceLevel || ''}"`,
+      `"${app.targetEbRole || 'N/A'}"`,
       `"${COMMITTEES.find((c) => c.id === app.primaryCommittee)?.title || app.primaryCommittee || ''}"`,
       `"${app.primaryPreferredCountry || app.preferredCountry || ''}"`,
       `"${COMMITTEES.find((c) => c.id === app.secondaryCommittee)?.title || app.secondaryCommittee || ''}"`,
       `"${app.secondaryPreferredCountry || ''}"`,
+      `"${(app.pastEbExperience || '').replace(/"/g, '""')}"`,
+      `"${(app.whyJoinAequitas || '').replace(/"/g, '""')}"`,
       `"${(app.statementOfPurpose || '').replace(/"/g, '""')}"`,
       `"${app.submittedAt || ''}"`
     ]);
@@ -377,29 +386,67 @@ export const AdminSecretariatModal: React.FC<AdminSecretariatModalProps> = ({ is
                               <span className="text-[#F5F3ED] font-mono">{app.phone}</span>
                             </div>
                             <div>
-                              <span className="font-label-caps text-[9px] text-[#75735B] uppercase block">Experience Level</span>
-                              <span className="text-[#C9A34E] font-semibold">{app.experienceLevel}</span>
+                              <span className="font-label-caps text-[9px] text-[#75735B] uppercase block">Track / Level</span>
+                              <span className="text-[#C9A34E] font-semibold">{app.experienceLevel} {app.targetEbRole ? `(${app.targetEbRole})` : ''}</span>
                             </div>
                           </div>
 
                           <div className="space-y-2 bg-[#0E0E0E] p-4 border border-white/5">
-                            <div>
-                              <span className="font-label-caps text-[9px] text-[#75735B] uppercase block">1st Portfolio Stance</span>
-                              <span className="text-[#C9A34E] font-medium">{app.primaryPreferredCountry || app.preferredCountry || 'Not Specified'}</span>
-                            </div>
-                            <div>
-                              <span className="font-label-caps text-[9px] text-[#75735B] uppercase block">2nd Preference & Stance</span>
-                              <span className="text-[#F5F3ED]">{getCommitteeTitle(app.secondaryCommittee)} {app.secondaryPreferredCountry ? `(${app.secondaryPreferredCountry})` : ''}</span>
-                            </div>
+                            {app.experienceLevel === 'Executive Board' ? (
+                              <>
+                                <div>
+                                  <span className="font-label-caps text-[9px] text-[#75735B] uppercase block">Target EB Role</span>
+                                  <span className="text-[#C9A34E] font-bold">{app.targetEbRole || 'Executive Board Roster'}</span>
+                                </div>
+                                <div>
+                                  <span className="font-label-caps text-[9px] text-[#75735B] uppercase block">Committee Choices</span>
+                                  <span className="text-[#F5F3ED]">1st: {getCommitteeTitle(app.primaryCommittee)} | 2nd: {getCommitteeTitle(app.secondaryCommittee)}</span>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <div>
+                                  <span className="font-label-caps text-[9px] text-[#75735B] uppercase block">1st Portfolio Stance</span>
+                                  <span className="text-[#C9A34E] font-medium">{app.primaryPreferredCountry || app.preferredCountry || 'Not Specified'}</span>
+                                </div>
+                                <div>
+                                  <span className="font-label-caps text-[9px] text-[#75735B] uppercase block">2nd Preference & Stance</span>
+                                  <span className="text-[#F5F3ED]">{getCommitteeTitle(app.secondaryCommittee)} {app.secondaryPreferredCountry ? `(${app.secondaryPreferredCountry})` : ''}</span>
+                                </div>
+                              </>
+                            )}
                             <div>
                               <span className="font-label-caps text-[9px] text-[#75735B] uppercase block">Submission Timestamp</span>
                               <span className="text-[#75735B] font-mono text-[10px]">{app.submittedAt}</span>
                             </div>
                           </div>
 
+                          {app.experienceLevel === 'Executive Board' && (
+                            <>
+                              <div className="md:col-span-2 bg-[#0E0E0E] p-4 border border-[#C9A34E]/20 space-y-3">
+                                <div>
+                                  <span className="font-label-caps text-[9px] text-[#C9A34E] uppercase block mb-1">
+                                    Past Chairing & EB Experience
+                                  </span>
+                                  <p className="font-sans text-xs text-[#D9D7D2]/90 font-light leading-relaxed whitespace-pre-wrap">
+                                    {app.pastEbExperience || 'No past experience detailed.'}
+                                  </p>
+                                </div>
+                                <div>
+                                  <span className="font-label-caps text-[9px] text-[#C9A34E] uppercase block mb-1">
+                                    Motivation for Joining Aequitas × Aastitva Executive Board
+                                  </span>
+                                  <p className="font-sans text-xs text-[#D9D7D2]/90 font-light leading-relaxed whitespace-pre-wrap">
+                                    {app.whyJoinAequitas || 'No specific motivation detailed.'}
+                                  </p>
+                                </div>
+                              </div>
+                            </>
+                          )}
+
                           <div className="md:col-span-2 bg-[#0E0E0E] p-4 border border-white/5">
                             <span className="font-label-caps text-[9px] text-[#75735B] uppercase block mb-1">
-                              Statement of Purpose / Policy Stance
+                              {app.experienceLevel === 'Executive Board' ? 'Committee Moderation & Crisis Strategy' : 'Statement of Purpose / Policy Stance'}
                             </span>
                             <p className="font-sans text-xs text-[#D9D7D2]/90 font-light leading-relaxed whitespace-pre-wrap">
                               {app.statementOfPurpose || 'No statement provided.'}

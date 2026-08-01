@@ -30,6 +30,10 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({
     primaryPreferredCountry: '',
     secondaryPreferredCountry: '',
     statementOfPurpose: '',
+    targetEbRole: 'Chairperson',
+    ebCommitteePreferences: ['ccc', 'lok-sabha', 'unhrc'],
+    pastEbExperience: '',
+    whyJoinAequitas: '',
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -235,118 +239,272 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({
                 </div>
               )}
 
-              {/* STEP 3: Committee & Portfolio Preferences */}
+              {/* STEP 3: Committee & Portfolio / EB Preferences */}
               {step === 3 && (
-                <div className="space-y-5">
-                  <h3 className="font-label-caps text-xs text-[#C9A34E] tracking-widest uppercase font-bold">
-                    Step 3: Committee & Portfolio Preferences
-                  </h3>
+                formData.experienceLevel === 'Executive Board' ? (
+                  <div className="space-y-5">
+                    <div className="flex items-center justify-between border-b border-[#C9A34E]/30 pb-2">
+                      <h3 className="font-label-caps text-xs text-[#C9A34E] tracking-widest uppercase font-bold">
+                        Step 3: Executive Board Role & Committee Preferences
+                      </h3>
+                      <span className="font-mono text-[9px] px-2 py-0.5 bg-[#4B2D8A]/50 border border-[#C9A34E] text-[#C9A34E] font-bold">
+                        EB ROSTER
+                      </span>
+                    </div>
 
-                  {/* Primary Preference Block */}
-                  <div className="p-4 bg-[#141414]/80 border border-[#C9A34E]/30 space-y-3">
-                    <span className="font-label-caps text-[10px] text-[#C9A34E] uppercase font-bold tracking-wider block">
-                      1st Preference (Primary)
-                    </span>
                     <div>
                       <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
-                        Primary Committee Preference *
+                        Target Executive Board Role *
                       </label>
                       <select
-                        value={formData.primaryCommittee}
-                        onChange={(e) =>
-                          setFormData({ ...formData, primaryCommittee: e.target.value })
-                        }
-                        className="w-full px-4 py-2.5 bg-[#0E0E0E] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
+                        value={formData.targetEbRole || 'Chairperson'}
+                        onChange={(e) => setFormData({ ...formData, targetEbRole: e.target.value })}
+                        className="w-full px-4 py-3 bg-[#141414] border border-[#C9A34E]/40 text-sm text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
                       >
-                        {COMMITTEES.map((c) => (
-                          <option key={c.id} value={c.id}>
-                            {c.title} ({c.abbreviation})
-                          </option>
-                        ))}
+                        <option value="Chairperson">Chairperson / Co-Chair</option>
+                        <option value="Vice-Chairperson">Vice-Chairperson / Deputy Director</option>
+                        <option value="Director General">Director General / Moderator</option>
+                        <option value="Rapporteur">Rapporteur / Executive Board Secretary</option>
+                        <option value="Executive Board Roster">Executive Board Open Roster (Any Assigned Committee)</option>
                       </select>
                     </div>
 
-                    <div>
-                      <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
-                        Primary Preferred Country / Portfolio / MP Stance
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.primaryPreferredCountry}
-                        onChange={(e) =>
-                          setFormData({ ...formData, primaryPreferredCountry: e.target.value })
-                        }
-                        placeholder="e.g. Delegate of India / MP for New Delhi / Mumbai Indians Franchise"
-                        className="w-full px-4 py-2.5 bg-[#0E0E0E] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none placeholder:text-[#75735B]"
-                      />
+                    <div className="p-4 bg-[#141414]/90 border border-white/10 space-y-4">
+                      <span className="font-label-caps text-[10px] text-[#C9A34E] uppercase font-bold tracking-wider block">
+                        Rank All Preferred Committee Assignments
+                      </span>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                          <label className="block font-label-caps text-[9px] text-[#D9D7D2]/80 mb-1 uppercase">
+                            1st Choice Committee *
+                          </label>
+                          <select
+                            value={formData.primaryCommittee}
+                            onChange={(e) => setFormData({ ...formData, primaryCommittee: e.target.value })}
+                            className="w-full px-3 py-2 bg-[#0E0E0E] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
+                          >
+                            {COMMITTEES.map((c) => (
+                              <option key={c.id} value={c.id}>
+                                {c.abbreviation} - {c.title}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block font-label-caps text-[9px] text-[#D9D7D2]/80 mb-1 uppercase">
+                            2nd Choice Committee *
+                          </label>
+                          <select
+                            value={formData.secondaryCommittee}
+                            onChange={(e) => setFormData({ ...formData, secondaryCommittee: e.target.value })}
+                            className="w-full px-3 py-2 bg-[#0E0E0E] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
+                          >
+                            {COMMITTEES.map((c) => (
+                              <option key={c.id} value={c.id}>
+                                {c.abbreviation} - {c.title}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block font-label-caps text-[9px] text-[#D9D7D2]/80 mb-1 uppercase">
+                            3rd Choice Committee
+                          </label>
+                          <select
+                            value={formData.ebCommitteePreferences?.[2] || 'unhrc'}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                ebCommitteePreferences: [
+                                  formData.primaryCommittee,
+                                  formData.secondaryCommittee,
+                                  e.target.value,
+                                ],
+                              })
+                            }
+                            className="w-full px-3 py-2 bg-[#0E0E0E] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
+                          >
+                            {COMMITTEES.map((c) => (
+                              <option key={c.id} value={c.id}>
+                                {c.abbreviation} - {c.title}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                ) : (
+                  <div className="space-y-5">
+                    <h3 className="font-label-caps text-xs text-[#C9A34E] tracking-widest uppercase font-bold">
+                      Step 3: Committee & Portfolio Preferences
+                    </h3>
 
-                  {/* Secondary Preference Block */}
-                  <div className="p-4 bg-[#141414]/80 border border-white/10 space-y-3">
-                    <span className="font-label-caps text-[10px] text-[#D9D7D2]/80 uppercase font-bold tracking-wider block">
-                      2nd Preference (Secondary)
-                    </span>
-                    <div>
-                      <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
-                        Secondary Committee Preference *
-                      </label>
-                      <select
-                        value={formData.secondaryCommittee}
-                        onChange={(e) =>
-                          setFormData({ ...formData, secondaryCommittee: e.target.value })
-                        }
-                        className="w-full px-4 py-2.5 bg-[#0E0E0E] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
-                      >
-                        {COMMITTEES.map((c) => (
-                          <option key={c.id} value={c.id}>
-                            {c.title} ({c.abbreviation})
-                          </option>
-                        ))}
-                      </select>
+                    {/* Primary Preference Block */}
+                    <div className="p-4 bg-[#141414]/80 border border-[#C9A34E]/30 space-y-3">
+                      <span className="font-label-caps text-[10px] text-[#C9A34E] uppercase font-bold tracking-wider block">
+                        1st Preference (Primary)
+                      </span>
+                      <div>
+                        <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
+                          Primary Committee Preference *
+                        </label>
+                        <select
+                          value={formData.primaryCommittee}
+                          onChange={(e) =>
+                            setFormData({ ...formData, primaryCommittee: e.target.value })
+                          }
+                          className="w-full px-4 py-2.5 bg-[#0E0E0E] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
+                        >
+                          {COMMITTEES.map((c) => (
+                            <option key={c.id} value={c.id}>
+                              {c.title} ({c.abbreviation})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
+                          Primary Preferred Country / Portfolio / MP Stance
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.primaryPreferredCountry}
+                          onChange={(e) =>
+                            setFormData({ ...formData, primaryPreferredCountry: e.target.value })
+                          }
+                          placeholder="e.g. Delegate of India / MP for New Delhi / Mumbai Indians Franchise"
+                          className="w-full px-4 py-2.5 bg-[#0E0E0E] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none placeholder:text-[#75735B]"
+                        />
+                      </div>
                     </div>
 
-                    <div>
-                      <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
-                        Secondary Preferred Country / Portfolio / MP Stance
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.secondaryPreferredCountry}
-                        onChange={(e) =>
-                          setFormData({ ...formData, secondaryPreferredCountry: e.target.value })
-                        }
-                        placeholder="e.g. Delegate of USA / MP for Varanasi / Chennai Super Kings"
-                        className="w-full px-4 py-2.5 bg-[#0E0E0E] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none placeholder:text-[#75735B]"
-                      />
+                    {/* Secondary Preference Block */}
+                    <div className="p-4 bg-[#141414]/80 border border-white/10 space-y-3">
+                      <span className="font-label-caps text-[10px] text-[#D9D7D2]/80 uppercase font-bold tracking-wider block">
+                        2nd Preference (Secondary)
+                      </span>
+                      <div>
+                        <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
+                          Secondary Committee Preference *
+                        </label>
+                        <select
+                          value={formData.secondaryCommittee}
+                          onChange={(e) =>
+                            setFormData({ ...formData, secondaryCommittee: e.target.value })
+                          }
+                          className="w-full px-4 py-2.5 bg-[#0E0E0E] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
+                        >
+                          {COMMITTEES.map((c) => (
+                            <option key={c.id} value={c.id}>
+                              {c.title} ({c.abbreviation})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
+                          Secondary Preferred Country / Portfolio / MP Stance
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.secondaryPreferredCountry}
+                          onChange={(e) =>
+                            setFormData({ ...formData, secondaryPreferredCountry: e.target.value })
+                          }
+                          placeholder="e.g. Delegate of USA / MP for Varanasi / Chennai Super Kings"
+                          className="w-full px-4 py-2.5 bg-[#0E0E0E] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none placeholder:text-[#75735B]"
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
+                )
               )}
 
-              {/* STEP 4: SOP */}
+              {/* STEP 4: SOP & Executive Board Vision */}
               {step === 4 && (
-                <div className="space-y-4">
-                  <h3 className="font-label-caps text-xs text-[#C9A34E] tracking-widest uppercase font-bold">
-                    Step 4: Statement of Purpose
-                  </h3>
+                formData.experienceLevel === 'Executive Board' ? (
+                  <div className="space-y-4">
+                    <h3 className="font-label-caps text-xs text-[#C9A34E] tracking-widest uppercase font-bold">
+                      Step 4: Executive Board Credentials & Firm Vision
+                    </h3>
 
-                  <div>
-                    <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
-                      Why do you wish to take your seat at Aequitas × Aastitva? *
-                    </label>
-                    <textarea
-                      required
-                      rows={4}
-                      value={formData.statementOfPurpose}
-                      onChange={(e) =>
-                        setFormData({ ...formData, statementOfPurpose: e.target.value })
-                      }
-                      placeholder="Outline your stance, legislative goals, and expectations for committee deliberations..."
-                      className="w-full px-4 py-3 bg-[#141414] border border-white/10 text-sm text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none leading-relaxed font-light"
-                    />
+                    <div>
+                      <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
+                        Past Chairing & EB Experience *
+                      </label>
+                      <textarea
+                        required
+                        rows={3}
+                        value={formData.pastEbExperience || ''}
+                        onChange={(e) =>
+                          setFormData({ ...formData, pastEbExperience: e.target.value })
+                        }
+                        placeholder="List your previous Executive Board positions, conferences chaired, secretariat experience, and awards..."
+                        className="w-full px-4 py-2.5 bg-[#141414] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none leading-relaxed font-light placeholder:text-[#75735B]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
+                        Why do you wish to join the Executive Board of Aequitas × Aastitva? *
+                      </label>
+                      <textarea
+                        required
+                        rows={3}
+                        value={formData.whyJoinAequitas || ''}
+                        onChange={(e) =>
+                          setFormData({ ...formData, whyJoinAequitas: e.target.value })
+                        }
+                        placeholder="Detail your motivation, alignment with our parliamentary standards, and leadership vision..."
+                        className="w-full px-4 py-2.5 bg-[#141414] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none leading-relaxed font-light placeholder:text-[#75735B]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
+                        Committee Moderation & Crisis Strategy *
+                      </label>
+                      <textarea
+                        required
+                        rows={3}
+                        value={formData.statementOfPurpose}
+                        onChange={(e) =>
+                          setFormData({ ...formData, statementOfPurpose: e.target.value })
+                        }
+                        placeholder="Outline your approach to committee dynamics, resolution drafting, and delegate guidance..."
+                        className="w-full px-4 py-2.5 bg-[#141414] border border-white/10 text-xs text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none leading-relaxed font-light placeholder:text-[#75735B]"
+                      />
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="space-y-4">
+                    <h3 className="font-label-caps text-xs text-[#C9A34E] tracking-widest uppercase font-bold">
+                      Step 4: Statement of Purpose
+                    </h3>
+
+                    <div>
+                      <label className="block font-label-caps text-[10px] text-[#D9D7D2] mb-1 uppercase">
+                        Why do you wish to take your seat at Aequitas × Aastitva? *
+                      </label>
+                      <textarea
+                        required
+                        rows={4}
+                        value={formData.statementOfPurpose}
+                        onChange={(e) =>
+                          setFormData({ ...formData, statementOfPurpose: e.target.value })
+                        }
+                        placeholder="Outline your stance, legislative goals, and expectations for committee deliberations..."
+                        className="w-full px-4 py-3 bg-[#141414] border border-white/10 text-sm text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none leading-relaxed font-light"
+                      />
+                    </div>
+                  </div>
+                )
               )}
 
               {/* Footer Controls */}
