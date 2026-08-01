@@ -66,30 +66,30 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenApply, activeSection, onSe
             : 'py-6 bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 flex items-center justify-between gap-2">
           {/* Brand Emblem & Logos */}
           <a
             href="#home"
             onClick={(e) => handleNavClick(e, 'home')}
-            className="flex items-center gap-3 group"
+            className="flex items-center gap-2 sm:gap-3 group min-w-0 shrink"
           >
-            <div className="relative flex items-center -space-x-2">
+            <div className="relative flex items-center -space-x-2 shrink-0">
               <img
                 src={BRAND_LOGOS.aequitas}
                 alt="Aequitas"
-                className="w-9 h-9 rounded-full border border-[#C9A34E]/40 object-cover shadow-[0_0_15px_rgba(201,163,78,0.25)] transition-transform duration-300 group-hover:scale-105"
+                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#C9A34E]/40 object-cover shadow-[0_0_15px_rgba(201,163,78,0.25)] transition-transform duration-300 group-hover:scale-105"
               />
               <img
                 src={BRAND_LOGOS.aastitva}
                 alt="Aastitva"
-                className="w-9 h-9 rounded-full border border-[#4B2D8A]/50 object-cover shadow-[0_0_15px_rgba(75,45,138,0.3)] transition-transform duration-300 group-hover:scale-105"
+                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#4B2D8A]/50 object-cover shadow-[0_0_15px_rgba(75,45,138,0.3)] transition-transform duration-300 group-hover:scale-105"
               />
             </div>
-            <div className="flex flex-col">
-              <span className="font-serif-luxury text-lg md:text-xl font-bold tracking-tight text-[#F5F3ED] flex items-center gap-1.5">
+            <div className="flex flex-col min-w-0">
+              <span className="font-serif-luxury text-sm sm:text-lg md:text-xl font-bold tracking-tight text-[#F5F3ED] flex items-center gap-1 sm:gap-1.5 truncate">
                 Aequitas <span className="text-[#C9A34E] font-sans text-xs">×</span> Aastitva
               </span>
-              <span className="font-label-caps text-[9px] text-[#C9A34E] tracking-widest uppercase">
+              <span className="font-label-caps text-[8px] sm:text-[9px] text-[#C9A34E] tracking-widest uppercase truncate hidden xs:block sm:block">
                 Youth Diplomatic Assembly
               </span>
             </div>
@@ -147,14 +147,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenApply, activeSection, onSe
           </div>
 
           {/* Mobile Right Corner Controls */}
-          <div className="flex md:hidden items-center gap-2">
+          <div className="flex md:hidden items-center gap-2 shrink-0">
             <ISTClock />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-[#F5F3ED] p-2 hover:text-[#C9A34E] transition-colors"
+              className="text-[#F5F3ED] p-1.5 hover:text-[#C9A34E] transition-colors"
               aria-label="Toggle Navigation Menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
             </button>
           </div>
         </div>
