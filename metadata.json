@@ -1,0 +1,6 @@
+{
+  "name": "Aequitas × Aastitva",
+  "description": "The flagship platform for Aequitas × Aastitva — Youth-led Indian diplomacy, parliamentary simulations, leadership experiences, and policy debates.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
