@@ -3,6 +3,8 @@ import * as THREE from 'three';
 import { motion } from 'motion/react';
 import { ChevronDown, Shield, Sparkles, Compass } from 'lucide-react';
 import { BRAND_LOGOS } from '../data/content';
+import { CountdownTimer } from './CountdownTimer';
+import { soundEngine } from '../utils/audio';
 
 interface Hero3DProps {
   onOpenApply: () => void;
@@ -557,17 +559,21 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenApply }) => {
             </div>
           </motion.div>
 
-          {/* Institutional Badge Line */}
+          {/* Institutional Badge Line & Countdown Timer */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#141414]/80 border border-[#C9A34E]/30 mb-8 backdrop-blur-md"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
           >
-            <Compass className="w-3.5 h-3.5 text-[#C9A34E]" />
-            <span className="font-label-caps text-[11px] text-[#D9D7D2] tracking-widest uppercase">
-              The Flagship Indian Youth Diplomatic Assembly
-            </span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#141414]/80 border border-[#C9A34E]/30 backdrop-blur-md">
+              <Compass className="w-3.5 h-3.5 text-[#C9A34E]" />
+              <span className="font-label-caps text-[11px] text-[#D9D7D2] tracking-widest uppercase">
+                The Flagship Indian Youth Diplomatic Assembly
+              </span>
+            </div>
+
+            <CountdownTimer targetDate="2026-11-14T09:00:00+05:30" />
           </motion.div>
 
           {/* Dynamic Assembling Serif Headline */}
@@ -602,7 +608,11 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenApply }) => {
             className="flex flex-col sm:flex-row items-center gap-5 justify-center mb-10"
           >
             <button
-              onClick={onOpenApply}
+              onClick={() => {
+                soundEngine.playClick();
+                onOpenApply();
+              }}
+              onMouseEnter={() => soundEngine.playHover()}
               className="w-full sm:w-auto px-9 py-4 bg-gradient-to-r from-[#4B2D8A] via-[#351E63] to-[#141414] text-[#F5F3ED] font-label-caps text-xs tracking-[0.2em] uppercase font-bold rounded-none border border-[#C9A34E]/50 shadow-[0_0_35px_rgba(75,45,138,0.5)] hover:shadow-[0_0_50px_rgba(201,163,78,0.5)] hover:border-[#C9A34E] transition-all duration-300 flex items-center justify-center gap-3 group"
             >
               <Sparkles className="w-4 h-4 text-[#C9A34E] group-hover:rotate-12 transition-transform" />
@@ -611,7 +621,9 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenApply }) => {
 
             <a
               href="#purpose"
-              className="w-full sm:w-auto px-9 py-4 bg-transparent text-[#D9D7D2] hover:text-[#F5F3ED] font-label-caps text-xs tracking-[0.2em] uppercase font-bold rounded-none border border-white/20 hover:border-[#C9A34E]/60 transition-all duration-300 backdrop-blur-sm"
+              onClick={() => soundEngine.playClick()}
+              onMouseEnter={() => soundEngine.playHover()}
+              className="w-full sm:w-auto px-9 py-4 bg-transparent text-[#D9D7D2] hover:text-[#F5F3ED] font-label-caps text-xs tracking-[0.2em] uppercase font-bold rounded-none border border-white/20 hover:border-[#C9A34E]/60 transition-all duration-300 backdrop-blur-sm flex items-center justify-center"
             >
               Enter The Assembly
             </a>

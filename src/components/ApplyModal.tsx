@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { COMMITTEES, BRAND_LOGOS } from '../data/content';
 import { ApplicationFormData } from '../types';
 import { X, Check, Sparkles, Award, Shield, FileText, ChevronRight, Printer, Loader2 } from 'lucide-react';
+import { soundEngine } from '../utils/audio';
 
 import { GOOGLE_FORM_CONFIG } from '../config/googleForm';
 
@@ -51,6 +52,7 @@ export const ApplyModal: React.FC<ApplyModalProps> = ({
       setTimeout(() => {
         setIsSubmitting(false);
         setSubmitted(true);
+        soundEngine.playSuccess();
 
         // Save application to localStorage
         try {

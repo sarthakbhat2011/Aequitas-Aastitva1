@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Home, Compass, Shield, Crown, Sparkles, Image } from 'lucide-react';
+import { Menu, X, Home, Compass, Shield, Crown, Sparkles, Image, Volume2, VolumeX } from 'lucide-react';
 import { BRAND_LOGOS } from '../data/content';
+import { soundEngine } from '../utils/audio';
 
 interface NavbarProps {
   onOpenApply: () => void;
@@ -11,6 +12,17 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenApply, activeSection, onSelectSection }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+
+  useEffect(() => {
+    setIsMuted(soundEngine.getMuted());
+  }, []);
+
+  const toggleSound = () => {
+    const muted = soundEngine.toggleMute();
+    setIsMuted(muted);
+    if (!muted) soundEngine.playClick();
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -106,10 +118,23 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenApply, activeSection, onSe
             })}
           </nav>
 
-          {/* Action CTA Button */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Action CTA Button & Audio Toggle */}
+          <div className="hidden md:flex items-center gap-3">
             <button
-              onClick={onOpenApply}
+              onClick={toggleSound}
+              onMouseEnter={() => soundEngine.playHover()}
+              title={isMuted ? "Unmute Ambient SFX" : "Mute SFX"}
+              className="p-2.5 rounded-full border border-white/15 bg-[#141414]/60 text-[#C9A34E] hover:text-[#F5F3ED] hover:border-[#C9A34E]/50 transition-all duration-300 backdrop-blur-md"
+            >
+              {isMuted ? <VolumeX className="w-4 h-4 text-[#75735B]" /> : <Volume2 className="w-4 h-4 text-[#C9A34E]" />}
+            </button>
+
+            <button
+              onClick={() => {
+                soundEngine.playClick();
+                onOpenApply();
+              }}
+              onMouseEnter={() => soundEngine.playHover()}
               className="group relative inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#4B2D8A] to-[#2A1852] text-[#F5F3ED] font-label-caps text-xs tracking-widest uppercase rounded-none border border-[#C9A34E]/40 hover:border-[#C9A34E] transition-all duration-300 shadow-[0_0_20px_rgba(75,45,138,0.4)] hover:shadow-[0_0_30px_rgba(201,163,78,0.4)] overflow-hidden"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-[#C9A34E]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

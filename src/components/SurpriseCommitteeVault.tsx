@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Lock, Key, ShieldAlert, Terminal, Eye, Sparkles, Check, FileQuestion, Crown } from 'lucide-react';
+import { soundEngine } from '../utils/audio';
 
 interface SurpriseCommitteeVaultProps {
   onUnlock?: () => void;
@@ -18,6 +19,7 @@ export const SurpriseCommitteeVault: React.FC<SurpriseCommitteeVaultProps> = ({ 
     if (passcode.trim().toUpperCase() === 'AEQUITAS' || passcode.trim().toUpperCase() === 'AASTITVA' || passcode.trim() === '2026' || passcode.trim().length > 0) {
       setIsUnlocked(true);
       setErrorMsg('');
+      soundEngine.playUnlock();
       if (onUnlock) onUnlock();
     } else {
       setErrorMsg('Clearance Code Invalid. Try entering "AEQUITAS" or click Override.');
@@ -28,6 +30,7 @@ export const SurpriseCommitteeVault: React.FC<SurpriseCommitteeVaultProps> = ({ 
     setPasscode('AEQUITAS-2026');
     setIsUnlocked(true);
     setErrorMsg('');
+    soundEngine.playUnlock();
     if (onUnlock) onUnlock();
   };
 
