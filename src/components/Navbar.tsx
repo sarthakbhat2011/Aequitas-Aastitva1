@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, Home, Compass, Shield, Crown, Sparkles, Image, Volume2, VolumeX } from 'lucide-react';
 import { BRAND_LOGOS } from '../data/content';
 import { soundEngine } from '../utils/audio';
+import { ISTClock } from './ISTClock';
 
 interface NavbarProps {
   onOpenApply: () => void;
@@ -118,13 +119,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenApply, activeSection, onSe
             })}
           </nav>
 
-          {/* Action CTA Button & Audio Toggle */}
+          {/* Action CTA Button, Audio Toggle & Tiny Aesthetic IST Clock */}
           <div className="hidden md:flex items-center gap-3">
+            <ISTClock />
+
             <button
               onClick={toggleSound}
               onMouseEnter={() => soundEngine.playHover()}
               title={isMuted ? "Unmute Ambient SFX" : "Mute SFX"}
-              className="p-2.5 rounded-full border border-white/15 bg-[#141414]/60 text-[#C9A34E] hover:text-[#F5F3ED] hover:border-[#C9A34E]/50 transition-all duration-300 backdrop-blur-md"
+              className="p-2 rounded-full border border-white/15 bg-[#141414]/60 text-[#C9A34E] hover:text-[#F5F3ED] hover:border-[#C9A34E]/50 transition-all duration-300 backdrop-blur-md"
             >
               {isMuted ? <VolumeX className="w-4 h-4 text-[#75735B]" /> : <Volume2 className="w-4 h-4 text-[#C9A34E]" />}
             </button>
@@ -143,14 +146,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenApply, activeSection, onSe
             </button>
           </div>
 
-          {/* Mobile Hamburger Toggle */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-[#F5F3ED] p-2 hover:text-[#C9A34E] transition-colors"
-            aria-label="Toggle Navigation Menu"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Mobile Right Corner Controls */}
+          <div className="flex md:hidden items-center gap-2">
+            <ISTClock />
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="text-[#F5F3ED] p-2 hover:text-[#C9A34E] transition-colors"
+              aria-label="Toggle Navigation Menu"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Top Drawer */}
