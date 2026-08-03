@@ -1,5 +1,5 @@
 // Aequitas × Aastitva Offline Service Worker
-const CACHE_NAME = 'aequitas-v1';
+const CACHE_NAME = 'aequitas-v3';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
