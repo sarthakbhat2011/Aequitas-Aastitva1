@@ -50,7 +50,12 @@ export const FeedbackSection: React.FC = () => {
     try {
       const saved = localStorage.getItem('aequitas_feedbacks');
       if (saved) {
-        setFeedbacks(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        // Ensure no legacy pre-existing seed quotes/feedbacks remain
+        const userSubmittedOnly = Array.isArray(parsed)
+          ? parsed.filter((item: any) => item && item.id && !item.id.startsWith('seed_') && !item.isSeed)
+          : [];
+        setFeedbacks(userSubmittedOnly);
       } else {
         setFeedbacks([]);
         localStorage.setItem('aequitas_feedbacks', JSON.stringify([]));
@@ -185,14 +190,22 @@ export const FeedbackSection: React.FC = () => {
       id="feedback"
       className="relative min-h-screen py-28 md:py-36 bg-[#141414] overflow-hidden flex flex-col justify-center border-t border-b border-[#C9A34E]/40"
     >
-      {/* VIVID & PROMINENT BACKGROUND EFFECTS & DYNAMIC ARTWORK */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-85">
-        {/* Animated Radial Spotlight Beams */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[900px] h-[900px] bg-radial-gradient from-[#4B2D8A]/35 via-[#C9A34E]/15 to-transparent rounded-full blur-[140px] animate-pulse-glow" />
-        <div className="absolute top-10 left-10 w-[600px] h-[600px] bg-[#C9A34E]/20 rounded-full blur-[120px] animate-pulse-glow" />
-        <div className="absolute bottom-10 right-10 w-[600px] h-[600px] bg-[#4B2D8A]/30 rounded-full blur-[130px] animate-pulse-glow" />
+      {/* VIVID & HIGH-IMPACT BACKGROUND EFFECTS & DYNAMIC ANIMATIONS */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-90">
+        {/* Animated Radial Spotlight Beams & Nebulae */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[1000px] bg-radial-gradient from-[#4B2D8A]/45 via-[#C9A34E]/20 to-transparent rounded-full blur-[150px] animate-float-orb-1" />
+        <div className="absolute top-[-100px] left-[-100px] w-[750px] h-[750px] bg-[#C9A34E]/25 rounded-full blur-[140px] animate-float-orb-2" />
+        <div className="absolute bottom-[-100px] right-[-100px] w-[800px] h-[800px] bg-[#4B2D8A]/40 rounded-full blur-[150px] animate-float-orb-3" />
+        <div className="absolute top-1/2 right-10 w-[550px] h-[550px] bg-[#9B6BFF]/20 rounded-full blur-[120px] animate-pulse-glow" />
 
-        {/* High-Contrast Vivid Mandalic Sacred Geometry */}
+        {/* Shimmering Lattice Grid Pattern */}
+        <div className="absolute inset-0 bg-[radial-gradient(#C9A34E_1.2px,transparent_1.2px)] [background-size:36px_36px] animate-shimmer-grid" />
+
+        {/* Sweeping Diagonal Laser Light Beams */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#C9A34E]/15 to-transparent h-1 w-full animate-beam top-1/3" />
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#9B6BFF]/20 to-transparent h-1 w-full animate-beam top-2/3" style={{ animationDelay: '5s' }} />
+
+        {/* High-Contrast Vivid Mandalic Sacred Geometry & Dynamic SVGs */}
         <svg
           className="w-full h-full text-[#C9A34E]"
           viewBox="0 0 1000 1000"
@@ -203,59 +216,109 @@ export const FeedbackSection: React.FC = () => {
           <circle
             cx="500"
             cy="500"
-            r="450"
+            r="460"
             stroke="#C9A34E"
             strokeWidth="2.5"
-            strokeDasharray="12 16"
-            className="animate-[spin_50s_linear_infinite] opacity-75"
+            strokeDasharray="14 18"
+            className="animate-[spin_40s_linear_infinite] opacity-80"
           />
           <circle
             cx="500"
             cy="500"
-            r="380"
+            r="390"
             stroke="#4B2D8A"
-            strokeWidth="3"
-            strokeDasharray="8 12"
-            className="animate-[spin_35s_linear_infinite_reverse] opacity-80"
+            strokeWidth="3.5"
+            strokeDasharray="10 14"
+            className="animate-[spin_28s_linear_infinite_reverse] opacity-85"
           />
           <circle
             cx="500"
             cy="500"
-            r="280"
+            r="300"
             stroke="#C9A34E"
+            strokeWidth="2"
+            className="animate-[spin_20s_linear_infinite] opacity-70"
+          />
+          <circle
+            cx="500"
+            cy="500"
+            r="200"
+            stroke="#9B6BFF"
             strokeWidth="1.5"
-            className="animate-[spin_25s_linear_infinite] opacity-60"
+            strokeDasharray="6 10"
+            className="animate-[spin_15s_linear_infinite_reverse] opacity-60"
           />
 
+          {/* Concentric Pulsing Inner Starburst */}
+          <g className="animate-pulse-glow origin-center">
+            <polygon
+              points="500,320 525,475 680,500 525,525 500,680 475,525 320,500 475,475"
+              fill="none"
+              stroke="url(#goldStarGrad)"
+              strokeWidth="1.5"
+              className="opacity-40"
+            />
+          </g>
+
           {/* Diagonal Laser Beams */}
-          <line x1="0" y1="0" x2="1000" y2="1000" stroke="url(#goldGradBeam)" strokeWidth="1.5" className="opacity-40" />
-          <line x1="1000" y1="0" x2="0" y2="1000" stroke="url(#purpleGradBeam)" strokeWidth="1.5" className="opacity-40" />
+          <line x1="0" y1="0" x2="1000" y2="1000" stroke="url(#goldGradBeam)" strokeWidth="2" className="opacity-50 animate-laser-pulse" />
+          <line x1="1000" y1="0" x2="0" y2="1000" stroke="url(#purpleGradBeam)" strokeWidth="2" className="opacity-50 animate-laser-pulse" style={{ animationDelay: '2s' }} />
 
           {/* Gradients */}
           <defs>
             <linearGradient id="goldGradBeam" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#C9A34E" stopOpacity="0" />
-              <stop offset="50%" stopColor="#C9A34E" stopOpacity="0.8" />
+              <stop offset="50%" stopColor="#C9A34E" stopOpacity="0.9" />
               <stop offset="100%" stopColor="#C9A34E" stopOpacity="0" />
             </linearGradient>
             <linearGradient id="purpleGradBeam" x1="100%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor="#4B2D8A" stopOpacity="0" />
-              <stop offset="50%" stopColor="#9B6BFF" stopOpacity="0.8" />
+              <stop offset="50%" stopColor="#9B6BFF" stopOpacity="0.9" />
               <stop offset="100%" stopColor="#4B2D8A" stopOpacity="0" />
+            </linearGradient>
+            <linearGradient id="goldStarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#C9A34E" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#9B6BFF" stopOpacity="0.3" />
             </linearGradient>
           </defs>
 
           {/* Floating Constellation Stars & Sparkles */}
           {[
-            [150, 150], [850, 150], [150, 850], [850, 850],
-            [500, 120], [500, 880], [120, 500], [880, 500]
-          ].map(([cx, cy], i) => (
-            <g key={i}>
-              <circle cx={cx} cy={cy} r="6" fill="#C9A34E" className="animate-ping opacity-75" />
-              <circle cx={cx} cy={cy} r="3" fill="#F5F3ED" />
+            [150, 150, 'animate-particle-rise-1'],
+            [850, 150, 'animate-particle-rise-2'],
+            [150, 850, 'animate-particle-rise-3'],
+            [850, 850, 'animate-particle-rise-1'],
+            [500, 100, 'animate-particle-rise-2'],
+            [500, 900, 'animate-particle-rise-3'],
+            [100, 500, 'animate-particle-rise-1'],
+            [900, 500, 'animate-particle-rise-2'],
+            [300, 250, 'animate-particle-rise-3'],
+            [700, 750, 'animate-particle-rise-1'],
+            [250, 700, 'animate-particle-rise-2'],
+            [750, 250, 'animate-particle-rise-3']
+          ].map(([cx, cy, animClass], i) => (
+            <g key={i} className={animClass as string}>
+              <circle cx={cx as number} cy={cy as number} r="7" fill="#C9A34E" className="animate-ping opacity-75" />
+              <circle cx={cx as number} cy={cy as number} r="3.5" fill="#F5F3ED" />
             </g>
           ))}
         </svg>
+
+        {/* Floating Animated Ambient Emblem Orbs */}
+        <motion.div
+          animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
+          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-20 left-12 w-24 h-24 border border-[#C9A34E]/30 rounded-full flex items-center justify-center bg-[#141414]/40 backdrop-blur-sm"
+        >
+          <Sparkles className="w-8 h-8 text-[#C9A34E]/60 animate-pulse" />
+        </motion.div>
+        <motion.div
+          animate={{ y: [0, 20, 0], rotate: [0, -10, 0] }}
+          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+          className="absolute bottom-24 right-16 w-28 h-28 border border-[#9B6BFF]/30 rounded-full flex items-center justify-center bg-[#141414]/40 backdrop-blur-sm"
+        >
+          <ShieldCheck className="w-10 h-10 text-[#9B6BFF]/60 animate-pulse" />
+        </motion.div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 w-full">

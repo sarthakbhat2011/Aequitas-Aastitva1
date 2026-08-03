@@ -110,7 +110,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenApply, onOpenAdmin }) => {
               </li>
               <li>
                 <a href="#feedback" className="hover:text-[#C9A34E] transition-colors">
-                  06. Feedback & Passed Quotes
+                  06. Delegate Feedback
                 </a>
               </li>
             </ul>

@@ -66,7 +66,7 @@ export default function App() {
       experiences: 'Delegate Experience & Pillars | Aequitas × Aastitva',
       committees: 'Sovereign Chambers & Agendas | Aequitas × Aastitva',
       gallery: 'Assembly Gallery & Archives | Aequitas × Aastitva',
-      feedback: 'Diplomatic Feedback & Passed Quotes | Aequitas × Aastitva',
+      feedback: 'Delegate Feedback Portal | Aequitas × Aastitva',
     };
     document.title = titleMap[activeSection] || 'Aequitas × Aastitva | MUN Assembly';
   }, [activeSection]);

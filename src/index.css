@@ -148,6 +148,64 @@
   animation: beamSweep 14s ease-in-out infinite;
 }
 
+/* Enhanced Feedback Background Visual Effects & Keyframe Animations */
+@keyframes floatOrbSlow {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(40px, -50px) scale(1.15); }
+  66% { transform: translate(-30px, 35px) scale(0.9); }
+}
+
+.animate-float-orb-1 {
+  animation: floatOrbSlow 18s ease-in-out infinite alternate;
+}
+
+.animate-float-orb-2 {
+  animation: floatOrbSlow 22s ease-in-out infinite alternate-reverse 3s;
+}
+
+.animate-float-orb-3 {
+  animation: floatOrbSlow 26s ease-in-out infinite alternate 6s;
+}
+
+@keyframes particleRise {
+  0% { transform: translateY(100px) scale(0.6); opacity: 0; }
+  20% { opacity: 0.8; }
+  80% { opacity: 0.8; }
+  100% { transform: translateY(-120px) scale(1.2); opacity: 0; }
+}
+
+.animate-particle-rise-1 {
+  animation: particleRise 9s ease-in-out infinite;
+}
+.animate-particle-rise-2 {
+  animation: particleRise 13s ease-in-out infinite 3s;
+}
+.animate-particle-rise-3 {
+  animation: particleRise 11s ease-in-out infinite 6s;
+}
+
+@keyframes laserPulse {
+  0%, 100% { opacity: 0.2; stroke-dashoffset: 0; }
+  50% { opacity: 0.85; stroke-dashoffset: 50; }
+}
+
+.animate-laser-pulse {
+  animation: laserPulse 4s ease-in-out infinite;
+}
+
+@keyframes shimmerGrid {
+  0%, 100% { opacity: 0.12; }
+  50% { opacity: 0.28; }
+}
+
+.animate-shimmer-grid {
+  animation: shimmerGrid 8s ease-in-out infinite;
+}
+
+.feedback-bg-glow {
+  background: radial-gradient(circle at 50% 50%, rgba(201, 163, 78, 0.18) 0%, rgba(75, 45, 138, 0.25) 45%, transparent 75%);
+}
+
 @media print {
   body * {
     visibility: hidden;
