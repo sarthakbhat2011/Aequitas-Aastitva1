@@ -122,6 +122,7 @@ export default function App() {
             {activeSection === 'home' && (
               <>
                 <Hero3D onOpenApply={() => handleOpenApply()} />
+                <FeedbackSection />
                 <Footer onOpenApply={() => handleOpenApply()} onOpenAdmin={() => setIsAdminOpen(true)} />
               </>
             )}
