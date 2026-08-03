@@ -16,7 +16,7 @@ export const COMMITTEES: Committee[] = [
       border: 'rgba(147, 0, 10, 0.4)',
       bgGlow: 'rgba(147, 0, 10, 0.15)',
     },
-    bgImageUrl: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&q=80&w=1200',
+    bgImageUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=1200',
     keyTopics: [
       'Role of political satire and caricature in democratic discourse',
       'Civil disobedience vs. public order legal boundaries',
@@ -97,7 +97,7 @@ export const COMMITTEES: Committee[] = [
       border: 'rgba(201, 163, 78, 0.4)',
       bgGlow: 'rgba(138, 103, 67, 0.2)',
     },
-    bgImageUrl: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&q=80&w=1200',
+    bgImageUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=1200',
     keyTopics: [
       'Public Examinations (Prevention of Unfair Means) Bill audits',
       'End-to-end cryptographic exam paper distribution',

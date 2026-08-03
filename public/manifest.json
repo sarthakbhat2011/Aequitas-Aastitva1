@@ -3,14 +3,16 @@
   "name": "Aequitas × Aastitva Model United Nations",
   "icons": [
     {
-      "src": "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=192&q=80",
+      "src": "https://lh3.googleusercontent.com/aida-public/AB6AXuBLP3rNRtQvXm98NMmooPtB0P7u_S5AIhlFJyi27uotJqKQetYflPMpfliLWTsNuqckwhUdHmAdmBGM39Yh6xHiAHbQEDZkvT1320hZpphw3K0l0lcQEbjOoD6sdLblL5axsZ41kJjjZ6F-zT-wr7CRCbe6CGV2EY4zHpuMOeo3jZyT4OyOtSBQ7iN9HYY5xLq34-IBO4paZBdKV4WSX2BUX98UKbGefLKdj0JnkDXDzgHzU_dqAAHsA65XpDPYkX7crg",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
-      "src": "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=512&q=80",
+      "src": "https://lh3.googleusercontent.com/aida-public/AB6AXuBLP3rNRtQvXm98NMmooPtB0P7u_S5AIhlFJyi27uotJqKQetYflPMpfliLWTsNuqckwhUdHmAdmBGM39Yh6xHiAHbQEDZkvT1320hZpphw3K0l0lcQEbjOoD6sdLblL5axsZ41kJjjZ6F-zT-wr7CRCbe6CGV2EY4zHpuMOeo3jZyT4OyOtSBQ7iN9HYY5xLq34-IBO4paZBdKV4WSX2BUX98UKbGefLKdj0JnkDXDzgHzU_dqAAHsA65XpDPYkX7crg",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
   "start_url": "/",
