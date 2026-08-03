@@ -9,6 +9,7 @@ import { ChapterCommittees } from './components/ChapterCommittees';
 import { SurpriseCommitteeVault } from './components/SurpriseCommitteeVault';
 import { GallerySection } from './components/GallerySection';
 import { FeedbackSection } from './components/FeedbackSection';
+import { HomeRelatableShowcase } from './components/HomeRelatableShowcase';
 import { ApplyModal } from './components/ApplyModal';
 import { Footer } from './components/Footer';
 import { ToastContainer, ToastMessage } from './components/Toast';
@@ -122,7 +123,7 @@ export default function App() {
             {activeSection === 'home' && (
               <>
                 <Hero3D onOpenApply={() => handleOpenApply()} />
-                <FeedbackSection />
+                <HomeRelatableShowcase onOpenApply={handleOpenApply} onSelectSection={handleSelectSection} />
                 <Footer onOpenApply={() => handleOpenApply()} onOpenAdmin={() => setIsAdminOpen(true)} />
               </>
             )}
