@@ -1,6 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BRAND_LOGOS } from '../data/content';
-import { Sparkles, Compass, Shield, Lock, Instagram, ExternalLink, X } from 'lucide-react';
+import {
+  Sparkles,
+  Compass,
+  Shield,
+  Lock,
+  Instagram,
+  ExternalLink,
+  X,
+  Smartphone,
+  Download,
+  CheckCircle2
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { soundEngine } from '../utils/audio';
 
@@ -11,6 +22,52 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onOpenApply, onOpenAdmin }) => {
   const [isInstaModalOpen, setIsInstaModalOpen] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isStandalone, setIsStandalone] = useState(false);
+  const [showIosInstructions, setShowIosInstructions] = useState(false);
+  const [installedSuccess, setInstalledSuccess] = useState(false);
+
+  useEffect(() => {
+    // Check if app is running in PWA standalone mode
+    if (window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone) {
+      setIsStandalone(true);
+    }
+
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    window.addEventListener('appinstalled', () => {
+      setIsStandalone(true);
+      setInstalledSuccess(true);
+      setDeferredPrompt(null);
+    });
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallApp = async () => {
+    soundEngine.playClick();
+    const isIos = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const choiceResult = await deferredPrompt.userChoice;
+      if (choiceResult.outcome === 'accepted') {
+        setInstalledSuccess(true);
+      }
+      setDeferredPrompt(null);
+    } else if (isIos) {
+      setShowIosInstructions(true);
+    } else {
+      alert("To download the app on your mobile phone, open your browser menu (top right 3 dots) and select 'Install app' or 'Add to Home screen'.");
+    }
+  };
 
   const handleOpenInsta = (url: string) => {
     soundEngine.playClick();
@@ -132,6 +189,41 @@ export const Footer: React.FC<FooterProps> = ({ onOpenApply, onOpenAdmin }) => {
           </div>
         </div>
 
+        {/* STRICTLY MOBILE ONLY: Download Native App Section */}
+        <div className="block md:hidden pt-8 pb-4 border-b border-white/10">
+          <div className="p-6 bg-gradient-to-r from-[#1E192B] via-[#141414] to-[#261B3D] border-2 border-[#C9A34E]/60 text-center relative overflow-hidden shadow-[0_0_30px_rgba(201,163,78,0.3)]">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Smartphone className="w-5 h-5 text-[#C9A34E] animate-pulse" />
+              <span className="font-label-caps text-xs text-[#C9A34E] tracking-widest uppercase font-bold">
+                Mobile Version Dedicated Feature
+              </span>
+            </div>
+
+            <h4 className="font-serif-luxury text-xl font-bold text-[#F5F3ED] mb-1">
+              Download Native Mobile App
+            </h4>
+            <p className="font-sans text-xs text-[#D9D7D2]/90 font-light mb-5 max-w-xs mx-auto leading-relaxed">
+              Install Aequitas × Aastitva directly onto your phone for instant, full-screen native access.
+            </p>
+
+            {isStandalone || installedSuccess ? (
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#C9A34E]/20 border border-[#C9A34E] text-[#C9A34E] font-label-caps text-xs font-bold uppercase tracking-wider shadow-[0_0_15px_rgba(201,163,78,0.3)]">
+                <CheckCircle2 className="w-4 h-4 text-[#C9A34E]" />
+                <span>Native App Installed</span>
+              </div>
+            ) : (
+              <button
+                onClick={handleInstallApp}
+                onMouseEnter={() => soundEngine.playHover()}
+                className="w-full inline-flex items-center justify-center gap-2.5 px-7 py-3.5 bg-gradient-to-r from-[#4B2D8A] via-[#351E63] to-[#C9A34E] text-[#F5F3ED] font-label-caps text-xs tracking-widest uppercase font-bold border-2 border-[#C9A34E] shadow-[0_0_25px_rgba(201,163,78,0.45)] active:scale-95 transition-all"
+              >
+                <Download className="w-4 h-4 text-[#C9A34E] animate-bounce" />
+                <span>Download Native App Direct</span>
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* Legal, Copyright, Dev Option & Instagram Quick Link */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-sans text-xs text-[#75735B]">
           <p>© 2026 Aequitas × Aastitva Diplomatic Summit. All Rights Reserved.</p>
@@ -193,7 +285,6 @@ export const Footer: React.FC<FooterProps> = ({ onOpenApply, onOpenAdmin }) => {
 
               {/* Handle Options */}
               <div className="space-y-4">
-                {/* Option 1: Aequitas Summit */}
                 <button
                   onClick={() => handleOpenInsta('https://www.instagram.com/aequitas_summit/')}
                   onMouseEnter={() => soundEngine.playHover()}
@@ -215,7 +306,6 @@ export const Footer: React.FC<FooterProps> = ({ onOpenApply, onOpenAdmin }) => {
                   <ExternalLink className="w-4 h-4 text-[#D9D7D2]/60 group-hover:text-[#C9A34E] group-hover:translate-x-0.5 transition-all" />
                 </button>
 
-                {/* Option 2: Aastitva Alliances */}
                 <button
                   onClick={() => handleOpenInsta('https://www.instagram.com/alliancesby_aastitva_/')}
                   onMouseEnter={() => soundEngine.playHover()}
@@ -238,7 +328,6 @@ export const Footer: React.FC<FooterProps> = ({ onOpenApply, onOpenAdmin }) => {
                 </button>
               </div>
 
-              {/* Modal Footer Note */}
               <div className="mt-6 text-center">
                 <span className="font-label-caps text-[10px] text-[#75735B] uppercase tracking-widest">
                   Aequitas × Aastitva Communications
@@ -248,7 +337,57 @@ export const Footer: React.FC<FooterProps> = ({ onOpenApply, onOpenAdmin }) => {
           </div>
         )}
       </AnimatePresence>
+
+      {/* iOS Installation Instruction Modal */}
+      <AnimatePresence>
+        {showIosInstructions && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="relative w-full max-w-sm bg-[#141414] border-2 border-[#C9A34E] p-6 text-center shadow-[0_0_50px_rgba(201,163,78,0.4)]"
+            >
+              <button
+                onClick={() => setShowIosInstructions(false)}
+                className="absolute top-4 right-4 text-[#D9D7D2] hover:text-[#C9A34E]"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <Smartphone className="w-12 h-12 text-[#C9A34E] mx-auto mb-3" />
+              <h3 className="font-serif-luxury text-xl font-bold text-[#F5F3ED] mb-2">
+                Install on iPhone / iPad
+              </h3>
+              <p className="font-sans text-xs text-[#D9D7D2]/80 leading-relaxed mb-4">
+                To download and install Aequitas × Aastitva on iOS:
+              </p>
+
+              <div className="space-y-3 text-left bg-[#0E0E0E] p-4 border border-white/15 text-xs font-sans text-[#F5F3ED]">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-[#C9A34E] text-[#141414] font-bold text-[10px] flex items-center justify-center">1</span>
+                  <span>Tap the <strong>Share</strong> button at bottom of Safari</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-[#C9A34E] text-[#141414] font-bold text-[10px] flex items-center justify-center">2</span>
+                  <span>Scroll down & tap <strong>"Add to Home Screen"</strong></span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-[#C9A34E] text-[#141414] font-bold text-[10px] flex items-center justify-center">3</span>
+                  <span>Tap <strong>Add</strong> to launch native app!</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setShowIosInstructions(false)}
+                className="mt-5 w-full py-2.5 bg-[#C9A34E] text-[#141414] font-label-caps text-xs font-bold uppercase tracking-wider"
+              >
+                Got It
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </footer>
   );
 };
-
