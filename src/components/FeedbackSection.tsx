@@ -12,12 +12,24 @@ import {
   X,
   Send,
   Lock,
-  ThumbsUp,
   MessageCircle,
-  Award
+  PenTool,
+  Zap,
+  Award,
+  CheckCircle2,
+  Flame,
+  Lightbulb,
+  ArrowRight
 } from 'lucide-react';
 import { FeedbackItem } from '../types';
 import { soundEngine } from '../utils/audio';
+
+const PROMPT_IDEAS = [
+  { label: '🏆 Best Committee Moment', text: 'My defining moment in committee was during the intense resolution voting when...' },
+  { label: '📜 Landmark Resolution Passed', text: 'Drafting statutory clauses for our committee agenda taught me...' },
+  { label: '⚡ High-Stakes Debate', text: 'Navigating floor decorum and unmoderated caucuses pushed my diplomatic skills...' },
+  { label: '⚖️ Executive Board Review', text: 'The moderation and guidance from our Executive Board were...' },
+];
 
 export const FeedbackSection: React.FC = () => {
   const [feedbacks, setFeedbacks] = useState<FeedbackItem[]>([]);
@@ -25,18 +37,19 @@ export const FeedbackSection: React.FC = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<FeedbackItem | null>(null);
 
-  // Form State
+  // Inline Form State for quick intrusion / feedback creation
   const [authorName, setAuthorName] = useState('');
   const [institution, setInstitution] = useState('');
   const [roleOrCommittee, setRoleOrCommittee] = useState('');
   const [feedbackText, setFeedbackText] = useState('');
   const [rating, setRating] = useState(5);
+  const [submittedSuccessMsg, setSubmittedSuccessMsg] = useState(false);
 
   // Filters & Search
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
 
-  // Initialize device token and load feedback items from localStorage (NO PRE-EXISTING SEED FEEDBACKS)
+  // Clear legacy seed data and initialize clean storage
   useEffect(() => {
     // Device ownership token setup
     let token = localStorage.getItem('aequitas_device_token');
@@ -46,37 +59,35 @@ export const FeedbackSection: React.FC = () => {
     }
     setMyToken(token);
 
-    // Load user-submitted feedbacks from localStorage
+    // ERADICATE any old legacy seed data saved from prior mock sessions
+    localStorage.removeItem('aequitas_feedbacks');
+
+    // Load authentic user-written feedbacks from dedicated storage
     try {
-      const saved = localStorage.getItem('aequitas_feedbacks');
+      const saved = localStorage.getItem('aequitas_user_written_feedbacks');
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Ensure no legacy pre-existing seed quotes/feedbacks remain
-        const userSubmittedOnly = Array.isArray(parsed)
-          ? parsed.filter((item: any) => item && item.id && !item.id.startsWith('seed_') && !item.isSeed)
-          : [];
-        setFeedbacks(userSubmittedOnly);
+        setFeedbacks(Array.isArray(parsed) ? parsed : []);
       } else {
         setFeedbacks([]);
-        localStorage.setItem('aequitas_feedbacks', JSON.stringify([]));
       }
     } catch (e) {
-      console.error('Failed to load feedbacks', e);
+      console.error('Failed to load user feedbacks', e);
       setFeedbacks([]);
     }
   }, []);
 
-  // Save feedbacks to localStorage
+  // Save user feedbacks to localStorage
   const saveFeedbacksToStorage = (updatedList: FeedbackItem[]) => {
     setFeedbacks(updatedList);
     try {
-      localStorage.setItem('aequitas_feedbacks', JSON.stringify(updatedList));
+      localStorage.setItem('aequitas_user_written_feedbacks', JSON.stringify(updatedList));
     } catch (e) {
       console.error('Failed to save feedback to storage', e);
     }
   };
 
-  // Open form for creating new feedback
+  // Open modal form for creating or editing feedback
   const handleOpenNewForm = () => {
     soundEngine.playClick();
     setEditingItem(null);
@@ -112,6 +123,12 @@ export const FeedbackSection: React.FC = () => {
     }
   };
 
+  // Use Prompt Idea helper
+  const handleUsePromptIdea = (ideaText: string) => {
+    soundEngine.playClick();
+    setFeedbackText(ideaText);
+  };
+
   // Submit Form (Create or Update)
   const handleSubmitForm = (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,7 +154,7 @@ export const FeedbackSection: React.FC = () => {
     } else {
       // Add new feedback item
       const newItem: FeedbackItem = {
-        id: `fb_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+        id: `fb_user_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
         authorName: authorName.trim(),
         institution: institution.trim() || 'Independent Delegation',
         roleOrCommittee: roleOrCommittee.trim() || 'Assembly Delegate',
@@ -146,12 +163,17 @@ export const FeedbackSection: React.FC = () => {
         timestamp: new Date().toISOString(),
         authorToken: myToken,
         verifiedBadge: 'Verified Delegate',
-        isFeatured: false,
+        isFeatured: true,
       };
       saveFeedbacksToStorage([newItem, ...feedbacks]);
     }
 
     soundEngine.playSuccess();
+    setSubmittedSuccessMsg(true);
+    setTimeout(() => setSubmittedSuccessMsg(false), 4000);
+
+    // Reset inline form fields
+    setFeedbackText('');
     setIsFormOpen(false);
   };
 
@@ -212,7 +234,6 @@ export const FeedbackSection: React.FC = () => {
           preserveAspectRatio="xMidYMid slice"
           fill="none"
         >
-          {/* Outer Rotating Glowing Rings */}
           <circle
             cx="500"
             cy="500"
@@ -249,7 +270,6 @@ export const FeedbackSection: React.FC = () => {
             className="animate-[spin_15s_linear_infinite_reverse] opacity-60"
           />
 
-          {/* Concentric Pulsing Inner Starburst */}
           <g className="animate-pulse-glow origin-center">
             <polygon
               points="500,320 525,475 680,500 525,525 500,680 475,525 320,500 475,475"
@@ -260,11 +280,9 @@ export const FeedbackSection: React.FC = () => {
             />
           </g>
 
-          {/* Diagonal Laser Beams */}
           <line x1="0" y1="0" x2="1000" y2="1000" stroke="url(#goldGradBeam)" strokeWidth="2" className="opacity-50 animate-laser-pulse" />
           <line x1="1000" y1="0" x2="0" y2="1000" stroke="url(#purpleGradBeam)" strokeWidth="2" className="opacity-50 animate-laser-pulse" style={{ animationDelay: '2s' }} />
 
-          {/* Gradients */}
           <defs>
             <linearGradient id="goldGradBeam" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#C9A34E" stopOpacity="0" />
@@ -282,7 +300,6 @@ export const FeedbackSection: React.FC = () => {
             </linearGradient>
           </defs>
 
-          {/* Floating Constellation Stars & Sparkles */}
           {[
             [150, 150, 'animate-particle-rise-1'],
             [850, 150, 'animate-particle-rise-2'],
@@ -304,7 +321,6 @@ export const FeedbackSection: React.FC = () => {
           ))}
         </svg>
 
-        {/* Floating Animated Ambient Emblem Orbs */}
         <motion.div
           animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
           transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
@@ -323,41 +339,196 @@ export const FeedbackSection: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 w-full">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#4B2D8A]/30 border border-[#C9A34E]/50 rounded-full mb-4 shadow-[0_0_20px_rgba(201,163,78,0.2)]">
             <Sparkles className="w-4 h-4 text-[#C9A34E] animate-pulse" />
             <span className="font-label-caps text-xs text-[#C9A34E] tracking-[0.25em] uppercase font-bold">
-              Delegate Reviews & Voice Conclave
+              Delegate Voice Conclave
             </span>
           </div>
 
-          <h2 className="font-serif-luxury text-3xl sm:text-5xl text-[#F5F3ED] font-bold text-glow-gold mb-6 leading-tight">
-            Delegate Feedback Assembly
+          <h2 className="font-serif-luxury text-3xl sm:text-5xl text-[#F5F3ED] font-bold text-glow-gold mb-4 leading-tight">
+            Share Your Delegate Experience
           </h2>
           <p className="font-sans text-base text-[#D9D7D2]/90 font-light leading-relaxed">
-            A dedicated portal for delegates, chairs, and participants to share their authentic feedback, committee experiences, and reviews on Aequitas × Aastitva.
+            Your voice shapes the legacy of Aequitas × Aastitva. Share your authentic committee feedback, reviews, and insights to feature on the Assembly Wall.
           </p>
-
-          {/* Action CTA: Submit Feedback */}
-          <div className="mt-8">
-            <button
-              onClick={handleOpenNewForm}
-              onMouseEnter={() => soundEngine.playHover()}
-              className="inline-flex items-center gap-3 px-9 py-4 bg-gradient-to-r from-[#4B2D8A] via-[#351E63] to-[#C9A34E] text-[#F5F3ED] font-label-caps text-xs tracking-widest uppercase font-bold border-2 border-[#C9A34E] shadow-[0_0_30px_rgba(201,163,78,0.4)] hover:shadow-[0_0_50px_rgba(201,163,78,0.7)] hover:scale-105 transition-all duration-300 group"
-            >
-              <MessageSquare className="w-4 h-4 text-[#C9A34E] group-hover:scale-125 transition-transform" />
-              <span>Submit Your Delegate Feedback</span>
-            </button>
-          </div>
         </div>
 
+        {/* INTRUDING & ALLURING INLINE FEEDBACK COMPOSER CARD */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-16 bg-[#141414]/95 border-2 border-[#C9A34E] p-6 md:p-10 shadow-[0_0_60px_rgba(201,163,78,0.35)] relative overflow-hidden backdrop-blur-xl"
+        >
+          {/* Subtle Corner Accents */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#C9A34E]/20 to-transparent pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-[#4B2D8A]/30 to-transparent pointer-events-none" />
+
+          <div className="relative z-10">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 pb-6 border-b border-[#C9A34E]/30">
+              <div>
+                <span className="font-label-caps text-xs text-[#C9A34E] tracking-widest uppercase font-bold flex items-center gap-2">
+                  <PenTool className="w-4 h-4 text-[#C9A34E]" />
+                  Write Your Review & Publish Stance
+                </span>
+                <h3 className="font-serif-luxury text-2xl md:text-3xl font-bold text-[#F5F3ED] mt-1">
+                  What Was Your Defining Conclave Moment?
+                </h3>
+              </div>
+
+              {submittedSuccessMsg && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex items-center gap-2 bg-[#C9A34E]/20 border border-[#C9A34E] px-4 py-2 text-[#C9A34E] font-label-caps text-xs font-bold shadow-[0_0_15px_rgba(201,163,78,0.3)]"
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  Your Feedback Published to Wall!
+                </motion.div>
+              )}
+            </div>
+
+            {/* Inspiring Prompt Ideas Helper Badges */}
+            <div className="mb-6">
+              <span className="font-sans text-xs text-[#D9D7D2]/70 font-semibold block mb-2">
+                Need inspiration? Click a prompt to start your review:
+              </span>
+              <div className="flex flex-wrap gap-2.5">
+                {PROMPT_IDEAS.map((idea, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handleUsePromptIdea(idea.text)}
+                    className="px-3.5 py-1.5 bg-[#0E0E0E] border border-[#C9A34E]/40 hover:border-[#C9A34E] text-[#D9D7D2] hover:text-[#F5F3ED] text-xs font-sans rounded-none transition-all flex items-center gap-1.5 hover:shadow-[0_0_15px_rgba(201,163,78,0.2)]"
+                  >
+                    <Lightbulb className="w-3.5 h-3.5 text-[#C9A34E]" />
+                    <span>{idea.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Interactive Feedback Form */}
+            <form onSubmit={handleSubmitForm} className="space-y-5">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {/* Author Name */}
+                <div>
+                  <label className="font-label-caps text-[10px] text-[#C9A34E] tracking-wider uppercase block mb-1 font-semibold">
+                    Your Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={authorName}
+                    onChange={(e) => setAuthorName(e.target.value)}
+                    placeholder="e.g. Aarav Mehta / Delegate Stance"
+                    className="w-full bg-[#0E0E0E] border border-white/20 px-4 py-3 text-xs font-sans text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
+                  />
+                </div>
+
+                {/* Institution */}
+                <div>
+                  <label className="font-label-caps text-[10px] text-[#C9A34E] tracking-wider uppercase block mb-1 font-semibold">
+                    Institution / Delegation
+                  </label>
+                  <input
+                    type="text"
+                    value={institution}
+                    onChange={(e) => setInstitution(e.target.value)}
+                    placeholder="e.g. St. Xavier's College, Mumbai"
+                    className="w-full bg-[#0E0E0E] border border-white/20 px-4 py-3 text-xs font-sans text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
+                  />
+                </div>
+
+                {/* Committee & Role */}
+                <div>
+                  <label className="font-label-caps text-[10px] text-[#C9A34E] tracking-wider uppercase block mb-1 font-semibold">
+                    Committee & Role / Stance
+                  </label>
+                  <input
+                    type="text"
+                    value={roleOrCommittee}
+                    onChange={(e) => setRoleOrCommittee(e.target.value)}
+                    placeholder="e.g. Delegate of Lok Sabha / UN Women"
+                    className="w-full bg-[#0E0E0E] border border-white/20 px-4 py-3 text-xs font-sans text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Rating Selector */}
+              <div>
+                <label className="font-label-caps text-[10px] text-[#C9A34E] tracking-wider uppercase block mb-1 font-semibold">
+                  Rate Your Experience
+                </label>
+                <div className="flex items-center gap-3 bg-[#0E0E0E] p-3 border border-white/20 w-fit">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => {
+                        soundEngine.playClick();
+                        setRating(star);
+                      }}
+                      onMouseEnter={() => soundEngine.playHover()}
+                      className="p-1 transition-transform hover:scale-125"
+                    >
+                      <Star
+                        className={`w-6 h-6 ${
+                          star <= rating ? 'text-[#C9A34E] fill-[#C9A34E]' : 'text-[#75735B]/40'
+                        }`}
+                      />
+                    </button>
+                  ))}
+                  <span className="font-mono text-xs text-[#C9A34E] font-bold ml-2">
+                    {rating} / 5 Stars
+                  </span>
+                </div>
+              </div>
+
+              {/* Feedback Message */}
+              <div>
+                <label className="font-label-caps text-[10px] text-[#C9A34E] tracking-wider uppercase block mb-1 font-semibold">
+                  Your Review & Feedback Message *
+                </label>
+                <textarea
+                  required
+                  rows={4}
+                  value={feedbackText}
+                  onChange={(e) => setFeedbackText(e.target.value)}
+                  placeholder="Share your authentic thoughts, resolution debate highlights, committee atmosphere, or reviews..."
+                  className="w-full bg-[#0E0E0E] border border-white/20 p-4 text-xs font-sans text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none leading-relaxed"
+                />
+              </div>
+
+              {/* Submit CTA Row */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/15">
+                <div className="flex items-center gap-2 text-[#D9D7D2]/80 text-xs font-sans">
+                  <Lock className="w-4 h-4 text-[#C9A34E]" />
+                  <span>Your feedback is saved locally on your device with full edit & delete control.</span>
+                </div>
+
+                <button
+                  type="submit"
+                  onMouseEnter={() => soundEngine.playHover()}
+                  className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-[#4B2D8A] via-[#351E63] to-[#C9A34E] text-[#F5F3ED] font-label-caps text-xs tracking-widest uppercase font-bold border-2 border-[#C9A34E] shadow-[0_0_25px_rgba(201,163,78,0.4)] hover:shadow-[0_0_45px_rgba(201,163,78,0.7)] hover:scale-105 transition-all flex items-center justify-center gap-2 group"
+                >
+                  <Send className="w-4 h-4 text-[#C9A34E] group-hover:translate-x-1 transition-transform" />
+                  <span>Publish My Review to Assembly Wall</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </motion.div>
+
         {/* Filter Tabs & Search Bar Row */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-12 bg-[#141414]/95 p-5 border-2 border-[#C9A34E]/40 rounded-none backdrop-blur-2xl shadow-[0_10px_40px_rgba(0,0,0,0.8)]">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 bg-[#141414]/95 p-5 border-2 border-[#C9A34E]/40 rounded-none backdrop-blur-2xl shadow-[0_10px_40px_rgba(0,0,0,0.8)]">
           {/* Filter Buttons */}
           <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
             {[
-              { id: 'all', label: 'All Feedbacks' },
-              { id: 'my-feedbacks', label: 'My Submitted Feedback' },
+              { id: 'all', label: `Published Reviews (${feedbacks.length})` },
+              { id: 'my-feedbacks', label: 'My Reviews' },
               { id: 'lok-sabha', label: 'Lok Sabha' },
               { id: 'crisis', label: 'Crisis Committee' },
               { id: 'eb', label: 'Executive Board' },
@@ -386,7 +557,7 @@ export const FeedbackSection: React.FC = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search feedback by delegate or keyword..."
+              placeholder="Search reviews by delegate or keyword..."
               className="w-full bg-[#0E0E0E] text-[#F5F3ED] placeholder-[#75735B] pl-9 pr-4 py-2.5 text-xs font-sans border border-white/20 focus:border-[#C9A34E] focus:outline-none transition-colors"
             />
           </div>
@@ -403,8 +574,8 @@ export const FeedbackSection: React.FC = () => {
                   <motion.div
                     key={item.id}
                     layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.4 }}
                     className={`glass-panel p-8 relative flex flex-col justify-between group transition-all duration-500 hover:shadow-[0_15px_45px_rgba(201,163,78,0.3)] ${
@@ -413,7 +584,6 @@ export const FeedbackSection: React.FC = () => {
                         : 'border border-[#C9A34E]/30 bg-[#141414]/90 hover:border-[#C9A34E]'
                     }`}
                   >
-                    {/* Top Feedback Icon & Ownership Badge */}
                     <div>
                       <div className="flex items-center justify-between mb-6">
                         <div className="p-3 bg-[#0E0E0E] border border-[#C9A34E]/50 text-[#C9A34E] shadow-[0_0_15px_rgba(201,163,78,0.2)]">
@@ -424,7 +594,7 @@ export const FeedbackSection: React.FC = () => {
                           {isMyFeedback ? (
                             <span className="inline-flex items-center gap-1 font-label-caps text-[9px] text-[#C9A34E] bg-[#C9A34E]/20 border border-[#C9A34E] px-2.5 py-1 uppercase tracking-wider font-bold shadow-[0_0_10px_rgba(201,163,78,0.3)]">
                               <UserCheck className="w-3.5 h-3.5 text-[#C9A34E]" />
-                              Your Feedback
+                              Your Review
                             </span>
                           ) : (
                             <span className="inline-flex items-center gap-1 font-label-caps text-[9px] text-[#E6DEFF] bg-[#4B2D8A]/30 border border-[#4B2D8A] px-2.5 py-1 uppercase tracking-wider font-semibold">
@@ -455,7 +625,7 @@ export const FeedbackSection: React.FC = () => {
                       </p>
                     </div>
 
-                    {/* Bottom Author Info & Action Controls Footer */}
+                    {/* Bottom Author Info & Action Controls */}
                     <div className="pt-6 border-t border-white/15">
                       <div className="flex items-center justify-between">
                         <div>
@@ -470,7 +640,7 @@ export const FeedbackSection: React.FC = () => {
                           </p>
                         </div>
 
-                        {/* STRICT USER OWNERSHIP: Edit & Delete buttons render ONLY for the author! */}
+                        {/* Edit & Delete Controls */}
                         {isMyFeedback && (
                           <div className="flex items-center gap-2">
                             <button
@@ -498,28 +668,26 @@ export const FeedbackSection: React.FC = () => {
             </AnimatePresence>
           </div>
         ) : (
-          /* Empty State when no feedbacks exist */
-          <div className="text-center py-20 glass-panel border-2 border-[#C9A34E]/40 max-w-2xl mx-auto my-8 bg-[#141414]/95 shadow-[0_0_50px_rgba(201,163,78,0.2)]">
+          /* Empty State when zero reviews exist */
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center py-16 px-6 glass-panel border-2 border-[#C9A34E]/40 max-w-2xl mx-auto my-6 bg-[#141414]/95 shadow-[0_0_50px_rgba(201,163,78,0.2)]"
+          >
             <MessageCircle className="w-14 h-14 text-[#C9A34E] mx-auto mb-4 opacity-80 animate-bounce" />
             <h3 className="font-serif-luxury text-2xl font-bold text-[#F5F3ED]">
-              No Feedbacks Submitted Yet
+              The Assembly Wall Awaits Your Voice
             </h3>
-            <p className="font-sans text-sm text-[#D9D7D2]/80 mt-2 mb-8 max-w-md mx-auto">
-              Be the first delegate or executive chair to submit your feedback and share your review with the conclave!
+            <p className="font-sans text-sm text-[#D9D7D2]/80 mt-2 mb-6 max-w-md mx-auto leading-relaxed">
+              No reviews have been published yet on this device. Use the feedback composer above to submit your review and feature your stance!
             </p>
-            <button
-              onClick={handleOpenNewForm}
-              className="px-8 py-3.5 bg-gradient-to-r from-[#4B2D8A] to-[#C9A34E] text-[#F5F3ED] font-label-caps text-xs tracking-widest uppercase font-bold border-2 border-[#C9A34E] shadow-[0_0_25px_rgba(201,163,78,0.4)] hover:scale-105 transition-all"
-            >
-              Submit First Feedback
-            </button>
-          </div>
+          </motion.div>
         )}
       </div>
 
-      {/* CREATE / EDIT FEEDBACK MODAL */}
+      {/* EDIT FEEDBACK MODAL */}
       <AnimatePresence>
-        {isFormOpen && (
+        {isFormOpen && editingItem && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl overflow-y-auto">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -541,12 +709,10 @@ export const FeedbackSection: React.FC = () => {
                   Delegate Voice Conclave
                 </span>
                 <h3 className="font-serif-luxury text-2xl font-bold text-[#F5F3ED]">
-                  {editingItem ? 'Edit Your Submitted Feedback' : 'Submit Your Feedback'}
+                  Edit Your Submitted Feedback
                 </h3>
                 <p className="font-sans text-xs text-[#D9D7D2]/80 mt-1">
-                  {editingItem
-                    ? 'Modify your feedback or review details. Changes update instantly.'
-                    : 'Share your authentic experience, committee reviews, and suggestions for Aequitas × Aastitva.'}
+                  Modify your review details below. Changes will update instantly on the Assembly Wall.
                 </p>
               </div>
 
@@ -563,7 +729,6 @@ export const FeedbackSection: React.FC = () => {
                       required
                       value={authorName}
                       onChange={(e) => setAuthorName(e.target.value)}
-                      placeholder="e.g. Aarav Mehta"
                       className="w-full bg-[#0E0E0E] border border-white/20 px-3.5 py-2.5 text-xs font-sans text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
                     />
                   </div>
@@ -577,7 +742,6 @@ export const FeedbackSection: React.FC = () => {
                       type="text"
                       value={institution}
                       onChange={(e) => setInstitution(e.target.value)}
-                      placeholder="e.g. St. Xavier's College, Mumbai"
                       className="w-full bg-[#0E0E0E] border border-white/20 px-3.5 py-2.5 text-xs font-sans text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
                     />
                   </div>
@@ -592,12 +756,11 @@ export const FeedbackSection: React.FC = () => {
                     type="text"
                     value={roleOrCommittee}
                     onChange={(e) => setRoleOrCommittee(e.target.value)}
-                    placeholder="e.g. Delegate of Lok Sabha / Chair of UN Women"
                     className="w-full bg-[#0E0E0E] border border-white/20 px-3.5 py-2.5 text-xs font-sans text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none"
                   />
                 </div>
 
-                {/* Rating Stars Selection */}
+                {/* Rating Selection */}
                 <div>
                   <label className="font-label-caps text-[10px] text-[#C9A34E] tracking-wider uppercase block mb-1 font-semibold">
                     Overall Experience Rating
@@ -636,17 +799,8 @@ export const FeedbackSection: React.FC = () => {
                     rows={4}
                     value={feedbackText}
                     onChange={(e) => setFeedbackText(e.target.value)}
-                    placeholder="Write your feedback, reviews, and insights on the conclave..."
                     className="w-full bg-[#0E0E0E] border border-white/20 p-3.5 text-xs font-sans text-[#F5F3ED] focus:border-[#C9A34E] focus:outline-none leading-relaxed"
                   />
-                </div>
-
-                {/* Ownership Note */}
-                <div className="p-3 bg-[#1E192B] border border-[#C9A34E]/40 flex items-center gap-2">
-                  <Lock className="w-4 h-4 text-[#C9A34E] shrink-0" />
-                  <p className="font-sans text-[11px] text-[#D9D7D2]/90 font-light">
-                    <strong>Device Ownership Protection:</strong> You can edit or delete your submitted feedback anytime from this device.
-                  </p>
                 </div>
 
                 {/* Form Action Buttons */}
@@ -664,7 +818,7 @@ export const FeedbackSection: React.FC = () => {
                     className="px-7 py-2.5 bg-gradient-to-r from-[#4B2D8A] to-[#C9A34E] text-[#F5F3ED] font-label-caps text-xs tracking-widest uppercase font-bold border border-[#C9A34E] shadow-[0_0_20px_rgba(201,163,78,0.4)] hover:brightness-110 flex items-center gap-2"
                   >
                     <Send className="w-3.5 h-3.5" />
-                    <span>{editingItem ? 'Save Updated Feedback' : 'Submit Feedback'}</span>
+                    <span>Save Updated Feedback</span>
                   </button>
                 </div>
               </form>
