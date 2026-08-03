@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Home, Compass, Shield, Crown, Sparkles, Image, Volume2, VolumeX } from 'lucide-react';
+import { Menu, X, Home, Compass, Shield, Crown, Sparkles, Image, Volume2, VolumeX, MessageSquareQuote } from 'lucide-react';
 import { BRAND_LOGOS } from '../data/content';
 import { soundEngine } from '../utils/audio';
 import { ISTClock } from './ISTClock';
@@ -43,6 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenApply, activeSection, onSe
     { name: 'Experiences', id: 'experiences', icon: Shield },
     { name: 'Committees', id: 'committees', icon: Crown },
     { name: 'Gallery', id: 'gallery', icon: Image },
+    { name: 'Feedback', id: 'feedback', icon: MessageSquareQuote },
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {

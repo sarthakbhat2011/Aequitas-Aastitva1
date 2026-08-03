@@ -8,6 +8,7 @@ import { ChapterExperiences } from './components/ChapterExperiences';
 import { ChapterCommittees } from './components/ChapterCommittees';
 import { SurpriseCommitteeVault } from './components/SurpriseCommitteeVault';
 import { GallerySection } from './components/GallerySection';
+import { FeedbackSection } from './components/FeedbackSection';
 import { ApplyModal } from './components/ApplyModal';
 import { Footer } from './components/Footer';
 import { ToastContainer, ToastMessage } from './components/Toast';
@@ -43,7 +44,7 @@ export default function App() {
       const hash = window.location.hash.replace('#', '').toLowerCase();
       if (hash === 'apply') {
         setIsApplyOpen(true);
-      } else if (['home', 'purpose', 'experiences', 'committees', 'gallery'].includes(hash)) {
+      } else if (['home', 'purpose', 'experiences', 'committees', 'gallery', 'feedback'].includes(hash)) {
         setActiveSection(hash);
       }
     };
@@ -65,6 +66,7 @@ export default function App() {
       experiences: 'Delegate Experience & Pillars | Aequitas × Aastitva',
       committees: 'Sovereign Chambers & Agendas | Aequitas × Aastitva',
       gallery: 'Assembly Gallery & Archives | Aequitas × Aastitva',
+      feedback: 'Diplomatic Feedback & Passed Quotes | Aequitas × Aastitva',
     };
     document.title = titleMap[activeSection] || 'Aequitas × Aastitva | MUN Assembly';
   }, [activeSection]);
@@ -149,6 +151,13 @@ export default function App() {
             {activeSection === 'gallery' && (
               <>
                 <GallerySection />
+                <Footer onOpenApply={() => handleOpenApply()} onOpenAdmin={() => setIsAdminOpen(true)} />
+              </>
+            )}
+
+            {activeSection === 'feedback' && (
+              <>
+                <FeedbackSection />
                 <Footer onOpenApply={() => handleOpenApply()} onOpenAdmin={() => setIsAdminOpen(true)} />
               </>
             )}
