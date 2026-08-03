@@ -182,7 +182,7 @@ export const EXPERIENCE_PILLARS: ExperiencePillar[] = [
     description: 'Master foreign policy alignment, bilateral pacts, resolution drafting, and coalition building under real-time geopolitics.',
     iconName: 'Globe',
     outcomes: ['Sovereign Stance Alignment', 'Working Paper & Resolution Drafting', 'Unilateral & Multilateral Caucus'],
-    metrics: '120+ Sovereign State Positions'
+    metrics: '80 Sovereign State Positions'
   },
   {
     id: 'leadership',
