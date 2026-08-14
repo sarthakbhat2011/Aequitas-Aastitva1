@@ -74,16 +74,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenApply, activeSection, onSe
             onClick={(e) => handleNavClick(e, 'home')}
             className="flex items-center gap-2 sm:gap-3 group min-w-0 shrink"
           >
-            <div className="relative flex items-center -space-x-2 shrink-0">
+            <div className="relative flex items-center shrink-0">
               <img
                 src={BRAND_LOGOS.aequitas}
                 alt="Aequitas"
                 className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#C9A34E]/40 object-cover shadow-[0_0_15px_rgba(201,163,78,0.25)] transition-transform duration-300 group-hover:scale-105"
-              />
-              <img
-                src={BRAND_LOGOS.aastitva}
-                alt="Aastitva"
-                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#4B2D8A]/50 object-cover shadow-[0_0_15px_rgba(75,45,138,0.3)] transition-transform duration-300 group-hover:scale-105"
               />
             </div>
             <div className="flex flex-col min-w-0">

@@ -85,16 +85,11 @@ export const Footer: React.FC<FooterProps> = ({ onOpenApply, onOpenAdmin }) => {
           {/* Brand Identity & Mission */}
           <div className="lg:col-span-6 space-y-6">
             <div className="flex items-center gap-3">
-              <div className="flex items-center -space-x-2">
+              <div className="flex items-center shrink-0">
                 <img
                   src={BRAND_LOGOS.aequitas}
                   alt="Aequitas"
                   className="w-10 h-10 rounded-full border border-[#C9A34E]"
-                />
-                <img
-                  src={BRAND_LOGOS.aastitva}
-                  alt="Aastitva"
-                  className="w-10 h-10 rounded-full border border-[#4B2D8A]"
                 />
               </div>
               <span className="font-serif-luxury text-2xl font-bold tracking-tight text-[#F5F3ED]">

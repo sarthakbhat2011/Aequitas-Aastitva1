@@ -515,45 +515,24 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenApply }) => {
         
         {/* Top Centered Content Wrapper */}
         <div className="max-w-6xl mx-auto px-6 text-center flex flex-col items-center w-full">
-          {/* Emblem Reveal - High Precision Brand Alliance */}
+          {/* Brand Logo Header */}
           <motion.div
             initial={{ opacity: 0, y: -30, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="flex items-center justify-center gap-6 md:gap-10 mb-8"
+            className="flex items-center justify-center mb-8"
           >
             {/* Aequitas Emblem */}
             <div className="group relative flex flex-col items-center">
-              <div className="relative p-1 rounded-full bg-gradient-to-b from-[#C9A34E]/60 via-[#8A6743]/30 to-transparent shadow-[0_0_35px_rgba(201,163,78,0.3)] group-hover:shadow-[0_0_50px_rgba(201,163,78,0.5)] transition-all duration-500">
+              <div className="relative p-1.5 rounded-full bg-gradient-to-b from-[#C9A34E]/60 via-[#8A6743]/30 to-transparent shadow-[0_0_40px_rgba(201,163,78,0.4)] group-hover:shadow-[0_0_60px_rgba(201,163,78,0.6)] transition-all duration-500">
                 <img
                   src={BRAND_LOGOS.aequitas}
                   alt="Aequitas Symbol"
-                  className="w-20 h-20 md:w-28 md:h-28 rounded-full object-cover mix-blend-screen"
+                  className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover mix-blend-screen"
                 />
               </div>
-              <span className="mt-2 font-label-caps text-[10px] text-[#C9A34E] tracking-widest uppercase opacity-80">
+              <span className="mt-2.5 font-label-caps text-xs text-[#C9A34E] tracking-widest uppercase opacity-90 font-bold">
                 Aequitas
-              </span>
-            </div>
-
-            {/* Fusion Cross Symbol */}
-            <div className="flex flex-col items-center justify-center h-20 md:h-28">
-              <span className="font-serif-luxury text-2xl md:text-3xl text-[#C9A34E] gold-gradient-text animate-pulse">
-                ×
-              </span>
-            </div>
-
-            {/* Aastitva Emblem */}
-            <div className="group relative flex flex-col items-center">
-              <div className="relative p-1 rounded-full bg-gradient-to-b from-[#4B2D8A]/70 via-[#2A1852]/40 to-transparent shadow-[0_0_35px_rgba(75,45,138,0.4)] group-hover:shadow-[0_0_50px_rgba(75,45,138,0.6)] transition-all duration-500">
-                <img
-                  src={BRAND_LOGOS.aastitva}
-                  alt="Aastitva Symbol"
-                  className="w-20 h-20 md:w-28 md:h-28 rounded-full object-cover mix-blend-screen"
-                />
-              </div>
-              <span className="mt-2 font-label-caps text-[10px] text-[#E6DEFF] tracking-widest uppercase opacity-80">
-                Aastitva
               </span>
             </div>
           </motion.div>
