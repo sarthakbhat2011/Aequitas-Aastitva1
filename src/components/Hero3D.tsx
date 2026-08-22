@@ -284,13 +284,13 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenApply }) => {
     // 3. Central Glowing Golden Dharma Chakra / Ashoka Wheel of Justice
     const chakraRimGeo = new THREE.TorusGeometry(3.2, 0.35, 16, 32);
     const chakraRim = new THREE.Mesh(chakraRimGeo, goldMat);
-    chakraRim.position.set(0, 7.5, 0.5);
+    chakraRim.position.set(0, 3.5, -4.0);
     assemblyPortalGroup.add(chakraRim);
 
     const chakraCenterGeo = new THREE.CylinderGeometry(0.8, 0.8, 0.4, 24);
     const chakraCenter = new THREE.Mesh(chakraCenterGeo, goldMat);
     chakraCenter.rotation.x = Math.PI / 2;
-    chakraCenter.position.set(0, 7.5, 0.5);
+    chakraCenter.position.set(0, 3.5, -4.0);
     assemblyPortalGroup.add(chakraCenter);
 
     // 24 Spokes of the Chakra Wheel
@@ -300,8 +300,8 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenApply }) => {
       const angle = (s / 24) * Math.PI * 2;
       spoke.position.set(
         Math.cos(angle) * 1.6,
-        7.5 + Math.sin(angle) * 1.6,
-        0.5
+        3.5 + Math.sin(angle) * 1.6,
+        -4.0
       );
       spoke.rotation.z = angle + Math.PI / 2;
       assemblyPortalGroup.add(spoke);
@@ -309,7 +309,7 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenApply }) => {
 
     // Inner Glowing Backdrop Light behind Chakra
     const chakraLight = new THREE.PointLight(0xFFD700, 3.5, 30);
-    chakraLight.position.set(0, 7.5, -1.0);
+    chakraLight.position.set(0, 3.5, -5.0);
     assemblyPortalGroup.add(chakraLight);
 
     // 4. Imperial Assembly Podium / Speaker's Throne (Rajya Asana)
@@ -524,11 +524,11 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenApply }) => {
           >
             {/* Aequitas Emblem */}
             <div className="group relative flex flex-col items-center">
-              <div className="relative p-1.5 rounded-full bg-gradient-to-b from-[#C9A34E]/60 via-[#8A6743]/30 to-transparent shadow-[0_0_40px_rgba(201,163,78,0.4)] group-hover:shadow-[0_0_60px_rgba(201,163,78,0.6)] transition-all duration-500">
+              <div className="relative p-1 rounded-full bg-[#141414] border-2 border-[#C9A34E]/80 shadow-[0_0_50px_rgba(201,163,78,0.4)] group-hover:shadow-[0_0_75px_rgba(201,163,78,0.7)] group-hover:border-[#C9A34E] transition-all duration-500">
                 <img
                   src={BRAND_LOGOS.aequitas}
                   alt="Aequitas Symbol"
-                  className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover shadow-2xl"
+                  className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover shadow-2xl relative z-10"
                 />
               </div>
               <span className="mt-2.5 font-label-caps text-xs text-[#C9A34E] tracking-widest uppercase opacity-90 font-bold">

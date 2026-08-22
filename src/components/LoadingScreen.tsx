@@ -91,7 +91,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onLoadingComplete 
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1 }}
-            className="relative flex items-center -space-x-3 p-3 bg-[#141414] rounded-full border border-[#C9A34E]/50 shadow-[0_0_50px_rgba(201,163,78,0.4)]"
+            className="relative flex items-center gap-4 p-3 bg-[#141414] rounded-full border border-[#C9A34E]/50 shadow-[0_0_50px_rgba(201,163,78,0.4)]"
           >
             <img
               src={BRAND_LOGOS.aequitas}
