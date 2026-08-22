@@ -528,7 +528,7 @@ export const Hero3D: React.FC<Hero3DProps> = ({ onOpenApply }) => {
                 <img
                   src={BRAND_LOGOS.aequitas}
                   alt="Aequitas Symbol"
-                  className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover mix-blend-screen"
+                  className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover shadow-2xl"
                 />
               </div>
               <span className="mt-2.5 font-label-caps text-xs text-[#C9A34E] tracking-widest uppercase opacity-90 font-bold">

@@ -302,5 +302,5 @@ export const GALLERY_ITEMS: GalleryItem[] = [
 
 export const BRAND_LOGOS = {
   aastitva: "https://lh3.googleusercontent.com/aida-public/AB6AXuAH8cr7PgN3uwhoP46uHZns9ztes6ysiK8Ne5Zjgu3cdqnXU3QXrdKBrntBAt2q4NcrQr4Q_TXyZd9ZLHJi0HomJwQ7NZH-SOxnHZcOLWQyOnfEyvDoNEEbjD-yM-3se_u_V1NY0OdByf07xxBv_wGK64_29K-z8B0XGXDKSGcse8Nw08HgE9v06L5tjdrFFP_4cjkYOtw8DhdkLC67sXkykyA1lT-iPsUGCTKeiHU_1OlHiEnCNClzzWC7dx7-uHECRw",
-  aequitas: "https://lh3.googleusercontent.com/aida-public/AB6AXuBLP3rNRtQvXm98NMmooPtB0P7u_S5AIhlFJyi27uotJqKQetYflPMpfliLWTsNuqckwhUdHmAdmBGM39Yh6xHiAHbQEDZkvT1320hZpphw3K0l0lcQEbjOoD6sdLblL5axsZ41kJjjZ6F-zT-wr7CRCbe6CGV2EY4zHpuMOeo3jZyT4OyOtSBQ7iN9HYY5xLq34-IBO4paZBdKV4WSX2BUX98UKbGefLKdj0JnkDXDzgHzU_dqAAHsA65XpDPYkX7crg"
+  aequitas: "/aequitas_logo.png"
 };
